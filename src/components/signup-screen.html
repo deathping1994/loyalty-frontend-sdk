@@ -1,3 +1,6 @@
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 <div
     class="fw_points XXsnipcss_extracted_selector_selectionXX tether-target-attached-top tether-element-attached-top tether-element-attached-center tether-target-attached-center">
     <div id="card-container" class="fw_points__overlay show_overlay" style="display: none;">
@@ -63,6 +66,8 @@
     </div>
 </div>
 <style>
+    @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600&display=swap');
+
     #widget-img {
         position: absolute;
         inset: 0px;
@@ -98,7 +103,8 @@
         right: 3%;
         z-index: 3;
         display: -ms-flexbox;
-        display: flex
+        display: flex;
+        font-family: 'Open Sans';
     }
 
     .fw_points__overlay {
@@ -422,8 +428,8 @@
         display: flex;
         -ms-flex-align: center;
         align-items: center;
-        width: 70px;
-        height: 70px;
+        width: 60px;
+        height: 60px;
         border-radius: 50%;
         background-color: #000000;
         padding: 1rem;
@@ -511,6 +517,14 @@
         display: flex;
     }
 
+    .fw_points .go-back-header .go-back-header-heading {
+        font-size: 1.6rem;
+        padding: 0rem 1rem;
+        font-weight: 600;
+        margin: 1rem 0rem;
+        cursor: pointer;
+    }
+
     .content {
         font-size: 13px;
     }
@@ -546,5 +560,36 @@
 
     .fw_points__overlay .content .cardContainer.cardRow .card .couponValue {
         font-size: 1.6rem;
+    }
+
+    .fw_points__overlay .content .dropDown__content .pointsRow {
+        background: #f7f8fa;
+        margin: 0rem 1rem;
+        padding: 0rem 1rem;
+        border-radius: 12px;
+
+    }
+
+    .fw_points__overlay .content .dropDown__content .pointsRow .pointsRow_reason {
+        display: flex;
+        justify-content: space-between;
+        font-size: 1.6rem;
+    }
+
+    .fw_points__overlay .content .dropDown__content .pointsRow .pointsRow_reason .pointsRow_reason_title {
+        font-weight: 600;
+    }
+
+    .fw_points__overlay .pointsActivityContainer h4 {
+        margin: 1rem;
+        font-size: 2rem;
+    }
+
+    .fw_points__overlay .overlay_modal {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        top: 0;
+        left: 0;
     }
 </style>

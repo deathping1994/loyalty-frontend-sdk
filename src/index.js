@@ -1,13 +1,32 @@
-import signup from "./components/signup.html"
+import signupscreen from "./components/signup-screen.html"
+import loggedinscreen from "./components/loggedin-screen.html"
+import overlaymodal from "./components/overlay-modal.html"
+import { injectVariablesToHTML } from "./utils/utils"
 
-// Load the HTML content into the DOM
-document.body.innerHTML += signup;
+(function loadfont() {
+    const link = document.createElement('link');
+    link.rel = 'stylesheet';
+    link.href = 'https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600&display=swap';
+    document.head.appendChild(link);
+})();
+
+
+// Load the HTML content into the shadow DOM
+const container = document.createElement('div');
+container.style.display = 'block';
+container.style.all = 'initial';
+const shadowRoot = container.attachShadow({ mode: 'open' });
+shadowRoot.innerHTML = `
+${signupscreen}
+`
+document.body.appendChild(container);
+
 
 
 (function popUptoggleOnAndOff() {
-    var widgetButton = document.getElementById('widget-container');
-    var cardContainer = document.getElementById('card-container');
-    var headerClose = document.getElementById('header-close');
+    var widgetButton = shadowRoot.getElementById('widget-container');
+    var cardContainer = shadowRoot.getElementById('card-container');
+    var headerClose = shadowRoot.getElementById('header-close');
 
     widgetButton.addEventListener('click', function () {
         if (cardContainer.style.display === 'none') {
@@ -43,81 +62,56 @@ window.onload = async function loggedIn() {
             })
         });
         const walletData = await response.json()
-
         const walletAmount = walletData?.data?.data?.wallet?.amount
 
-        const cardConatiner = document.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .fw_points__overlay');
-        cardConatiner.innerHTML = `
-        <div class="header">
-            <img id="header-close" class="close" src="https://earthrhythm-media.farziengineer.co/hosted/icons8-multiply-50-c78740eccab9.png" alt="close header" width="30px">
-            <div class="">
-                <h1 class="heading">Welcome to</h1>
-                <p>Loyalty</p>
-            </div>
-            </div>
-            <div class="content">
-            <div class="cardWrapper points">
-                <div class="dropDown">
-                    <div class="dropDown__content">
-                        <p class="">My points </p>
-                    </div>
-                    <div class="pointsBox">
-                    <p>${walletAmount}</p>
-                    </div>
-                </div>
-            </div>
-            <div>
-            <div class="cardContainer">
-                <div class="rowHead">
-                <p>Coupons</p>
-                <div>View all</div>
-                </div>
-            </div>
-            <div class="cardContainer cardRow">
-                <div class="card">
-                    <p>Rs. 10 off on Striped Silk Blouse</p>
-                    <div class="couponValue">10</div>
-                </div>
-                <div class="card">
-                    <p>Rs. 30 off on Striped Silk Blouse</p>
-                    <div class="couponValue">30</div>
-                </div>
-            </div>
+        const loggedInScreenHTML = injectVariablesToHTML(loggedinscreen, ".pointsBox .walletAmount", walletAmount)
 
-            <!--
-            <div class="cardWrapper pointsActivity">
-                
-                
-            </div>
-            -->
-            </div>
-            </div>
-            </div>
-        `
-        let walletPointsActivityHTML = '<h1>Points activity</h1>';
-        walletData?.data?.data?.wallet?.logs?.edges?.forEach((edge) => {
-            let symbol, color;
-            if (edge.node.type === "ADD") {
-                symbol = '+';
-                color = "green";
-            } else {
-                symbol = '-';
-                color = "red";
-            }
+        const cardContainer = shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .fw_points__overlay');
+        cardContainer.innerHTML = loggedInScreenHTML;
 
-            walletPointsActivityHTML = walletPointsActivityHTML + `
-            <div class="dropDown removeBanner">
-                    <div class="dropDown__content">
-                        <div class="pointsRow">
-                        <p class="" style="color:${color}">${symbol} ${edge.node.amount} points</p>
-                        <p class="">${new Date(edge.node.created)?.toISOString()?.split('T')?.[0]}</p>
+
+        (function showPointsHistory() {
+            shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .fw_points__overlay .cardWrapper.points').addEventListener('click', function () {
+
+                let walletPointsActivityHTML = '';
+                walletData?.data?.data?.wallet?.logs?.edges?.forEach((edge) => {
+                    let symbol, color;
+                    if (edge.node.type === "ADD") {
+                        symbol = '+';
+                        color = "green";
+                    } else {
+                        symbol = '-';
+                        color = "red";
+                    }
+
+                    walletPointsActivityHTML = walletPointsActivityHTML + `
+                <div class="dropDown removeBanner">
+                        <div class="dropDown__content">
+                            <div class="pointsRow">
+                            <div class="pointsRow_reason">
+                            <p class="pointsRow_reason_title" >${edge.node.reason}</p>
+                            <p style="color:${color};font-weight:600">${symbol}${edge.node.amount} points</p>
+                            </div>
+                            
+                            <p class="">${new Date(edge.node.created)?.toISOString()?.split('T')?.[0]}</p>
+                            </div>
                         </div>
                     </div>
-                </div>
-            `
-        });
+                `
+                });
 
-        document.querySelector('.pointsActivity').innerHTML = walletPointsActivityHTML;
+
+                const overLayScreenPointsActivity = injectVariablesToHTML(overlaymodal, ".overlay_modal .content", `<div class="pointsActivityContainer"><h4>Points activity</h4>${walletPointsActivityHTML}</div>`)
+
+                shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .fw_points__overlay').innerHTML = overLayScreenPointsActivity;
+
+                shadowRoot.querySelector('.fw_points__overlay .overlay_modal .go-back-header .go-back-header-heading').addEventListener('click', function () {
+                    loggedIn()
+                });
+            });
+
+
+        })();
     }
 
 
