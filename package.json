@@ -1,0 +1,24 @@
+{
+  "name": "farziwallet-webpack-script",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "npx webpack --mode production",
+    "start": "concurrently \"npm run build:watch\" \"npm run serve\"",
+    "build:watch": "webpack --mode production --watch",
+    "serve": "http-server dist -c-1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "concurrently": "^8.0.1",
+    "html-loader": "^4.2.0",
+    "html-webpack-plugin": "^5.5.1",
+    "http-server": "^14.1.1",
+    "webpack": "^5.84.1",
+    "webpack-cli": "^5.1.1"
+  }
+}
