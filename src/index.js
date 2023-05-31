@@ -1,6 +1,8 @@
 import signupscreen from "./components/signup-screen.html"
 import loggedinscreen from "./components/loggedin-screen.html"
 import overlaymodal from "./components/overlay-modal.html"
+import unlockcodescreen from "./components/unlock-code-screen.html"
+
 import { injectVariablesToHTML } from "./utils/utils"
 
 (function loadfont() {
@@ -112,9 +114,48 @@ window.onload = async function loggedIn() {
 
 
         })();
+
+        (function redeemCodeOnClick() {
+            shadowRoot.querySelectorAll('.fw_points__overlay .content .couponCodes .cardContainer.cardRow .card').forEach((element) => {
+                element.addEventListener('click', function (event) {
+
+                    const couponAmount = event.target.querySelector(".couponValue")?.innerText || event.target.innerText;
+
+                    let overLayScreenUnlockCode = injectVariablesToHTML(overlaymodal, ".overlay_modal .content", unlockcodescreen)
+                    overLayScreenUnlockCode = injectVariablesToHTML(overLayScreenUnlockCode, ".unlock-heading", `Rs. ${couponAmount} off on Striped Silk Blouse`)
+                    overLayScreenUnlockCode = injectVariablesToHTML(overLayScreenUnlockCode, ".unlock-text", `Unlock for ${couponAmount} points`)
+
+
+                    shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .fw_points__overlay').innerHTML = overLayScreenUnlockCode;
+
+                    shadowRoot.querySelector('.fw_points__overlay .overlay_modal .content .unlock-coupon-card .unlock-button').addEventListener('click', async function () {
+                        const response = await fetch(`${process.env.WALLET_API_URI}/get-code`, {
+                            "method": "POST",
+                            "headers": {
+                                "Content-Type": "application/json"
+                            },
+                            "body": JSON.stringify({
+                                "customer_id": customer_id,
+                                "user_hash": customer_tags,
+                                "couponAmount": couponAmount
+                            })
+                        });
+                        const couponData = await response.json();
+                        console.log("event.target couponCode", couponData?.data?.coupon_code);
+                        shadowRoot.querySelector('.fw_points__overlay .overlay_modal .content .unlock-coupon-card .unlock-button-container').innerHTML = `
+                        <p class="unlock-text">Use this code at checkout</p>
+                        <div class="revealed-code">${couponData?.data?.coupon_code}</div>
+                        `
+
+                    });
+
+
+                    shadowRoot.querySelector('.fw_points__overlay .overlay_modal .go-back-header .go-back-header-heading').addEventListener('click', function () {
+                        loggedIn()
+                    });
+                })
+            })
+        })();
     }
-
-
-
 }
 
