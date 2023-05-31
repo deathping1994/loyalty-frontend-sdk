@@ -51,7 +51,7 @@ window.onload = async function loggedIn() {
     const customer_tags = mainScript.getAttribute('data-customer-tag')?.trim();
 
     if (customer_id && customer_tags) {
-        const response = await fetch("http://localhost:3000/walletlogs", {
+        const response = await fetch(`${process.env.WALLET_API_URI}/walletlogs`, {
             "method": "POST",
             "headers": {
                 "Content-Type": "application/json"
