@@ -108,8 +108,10 @@
     }
 
     .fw_points__overlay {
-        width: 315px;
-        height: 50rem;
+        max-width: 350px;
+        max-height: 580px;
+        width: 85vw;
+        height: 80vh;
         position: relative;
         bottom: 85%;
         right: 18%;
@@ -166,9 +168,10 @@
 
     .fw_points__overlay .heading {
         line-height: 1;
-        font-size: 1.6rem;
+        font-size: 12px;
         color: #0C0C0C;
-        margin: 0.5rem;
+        margin: 5px;
+        font-weight: 600;
     }
 
     .fw_points__overlay .wallet-amount {
@@ -179,9 +182,8 @@
         background: #fff;
         width: 100%;
         z-index: 2;
-        padding: 1rem;
-        min-height: 4rem;
-        height: 10rem;
+        padding: 14px;
+        height: 50px;
         -ms-flex-pack: start;
         justify-content: flex-start;
         align-items: baseline;
@@ -189,14 +191,14 @@
 
     .fw_points__overlay .header p {
         color: #0C0C0C;
-        font-size: 2rem;
-        font-weight: 500;
-        margin: 0rem 0.5rem;
+        font-size: 20px;
+        font-weight: 600;
+        margin: 0px 5px;
     }
 
     .fw_points__overlay .content {
         grid-gap: 3rem;
-        gap: 3rem;
+        gap: 2.5rem;
         padding-bottom: 2rem;
         min-height: 19.5rem
     }
@@ -230,40 +232,58 @@
     .fw_points__overlay .content .cardContainer {
         z-index: 2;
         background-color: #fff;
-        width: 90%;
-        margin: -2rem auto 0;
+        padding: 6px 20px;
         border-radius: 4px;
-        min-height: -webkit-fit-content;
-        min-height: -moz-fit-content;
-        min-height: fit-content;
-        padding: 1rem;
         -ms-flex-align: center;
         align-items: center;
-        grid-gap: .8rem;
-        gap: .8rem
+        gap: 16px
     }
 
     .fw_points__overlay .content .cardWrapper.points {
         background-color: #000;
         padding: 1.2rem 1.3rem;
-        border-radius: 20px;
+        border-radius: 16px;
         box-shadow: none;
+        margin: 0px 14px;
+        width: auto;
     }
 
     .fw_points__overlay .content .cardWrapper.points p {
         color: #fff;
-        font-size: 1.7rem;
+        font-size: 14px;
+        font-weight: 600;
+    }
+
+    .fw_points__overlay .content .cardWrapper.points p.tier {
+        color: #fff;
+        font-size: 10px;
+        font-weight: 400;
+        margin-top: 5px;
     }
 
     .fw_points__overlay .content .cardWrapper.points .pointsBox {
         background-color: #fff;
         border-radius: 4px;
+        margin: 0px 6px;
+        padding: 0.5rem 1rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
     }
 
     .fw_points__overlay .content .cardWrapper.points .pointsBox p {
         color: #000;
-        padding: 0.5rem 1rem;
         font-weight: 600;
+        font-size: 20px;
+        padding: 0px 0px 0px 8px;
+    }
+
+    .fw_points__overlay .content .cardWrapper.points .pointsBox span {
+        background: url("https://earthrhythm-media.farziengineer.co/hosted/Group_5-6eddfdbfd949.png");
+        display: block;
+        width: 20px;
+        height: 20px;
+        background-size: 100% 100%;
     }
 
     .fw_points__overlay .content .cardWrapper h1 {
@@ -415,7 +435,8 @@
     }
 
     .fw_points .show_overlay {
-        opacity: 1
+        opacity: 1;
+        overflow-x: hidden;
     }
 
     .fw_points .hide_overlay {
@@ -537,35 +558,102 @@
     .fw_points .rowHead {
         display: flex;
         justify-content: space-between;
+        align-items: center;
     }
 
     .fw_points .rowHead p {
-        font-size: 2rem;
-        font-weight: 500;
-        margin: 0rem 0.5rem;
+        font-size: 20px;
+        font-weight: 700;
+        margin: 0;
     }
 
     .fw_points__overlay .content .cardContainer.cardRow {
         display: flex;
+        overflow-x: auto;
+    }
+
+    /* Hide scrollbar for Chrome, Safari and Opera */
+    .fw_points__overlay .content .cardContainer.cardRow::-webkit-scrollbar {
+        display: none;
+    }
+
+    /* Hide scrollbar for IE, Edge and Firefox */
+    .fw_points__overlay .content .cardContainer.cardRow {
+        -ms-overflow-style: none;
+        /* IE and Edge */
+        scrollbar-width: none;
+        /* Firefox */
     }
 
     .fw_points__overlay .content .cardContainer.cardRow .card {
-        padding: 1rem;
-        background: #f7f8fa;
         border-radius: 12px;
         color: #000;
         font-size: 1.4rem;
         line-height: 2rem;
         cursor: pointer;
+        min-width: 120px;
+    }
+
+    .fw_points__overlay .content .cardContainer.cardRow .card img {
+        display: block;
+        width: 100%;
+        border-radius: 8px;
+    }
+
+    .fw_points__overlay .content .cardContainer.cardRow .card .couponDesc {
+        padding: 8px;
+        background: #F4F4F4;
+        border-radius: 8px;
+        box-shadow: 0px -4px 10px rgba(0, 0, 0, 0.1);
+        position: relative;
+        top: -12px;
+    }
+
+    .fw_points__overlay .content .cardContainer.cardRow .card .couponDesc .floating-label {
+        position: absolute;
+        top: -15px;
+        right: 10px;
+        background: #000;
+        color: #fff;
+        width: 40px;
+        height: 24px;
+        text-align: center;
+        line-height: 24px;
+        font-weight: 600;
+        font-size: 12px;
+        border-radius: 4px;
+    }
+
+    .fw_points__overlay .content .cardContainer.cardRow .card .couponDesc .couponDesc-text {
+        font-size: 13px;
+        font-weight: 500;
+    }
+
+    .fw_points__overlay .content .cardContainer.cardRow .card .couponDesc p {
+        font-size: 14px;
+        font-weight: 400;
+        margin: 0;
     }
 
     .fw_points__overlay .content .cardContainer.cardRow .card .couponValue {
-        font-size: 1.6rem;
-        margin-top: 2rem;
+        font-size: 14px;
+        margin-top: 9px;
+        font-weight: 400;
+        display: flex;
+        align-items: center;
+    }
+
+    .fw_points__overlay .content .cardContainer.cardRow .card .couponValue .coins-icon {
+        background: url("https://earthrhythm-media.farziengineer.co/hosted/Group_5-6eddfdbfd949.png");
+        display: block;
+        width: 14px;
+        height: 14px;
+        background-size: 100% 100%;
+        margin-right: 4px;
     }
 
     .fw_points__overlay .content .dropDown__content .pointsRow {
-        background: #f7f8fa;
+        background: #F4F4F4;
         margin: 0rem 1rem;
         padding: 0rem 1rem;
         border-radius: 12px;

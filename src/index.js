@@ -119,7 +119,7 @@ window.onload = async function loggedIn() {
             shadowRoot.querySelectorAll('.fw_points__overlay .content .couponCodes .cardContainer.cardRow .card').forEach((element) => {
                 element.addEventListener('click', function (event) {
 
-                    const couponAmount = event.target.querySelector(".couponValue")?.innerText || event.target.innerText;
+                    const couponAmount = event.target.getAttribute("data-coupon-amount");
 
                     let overLayScreenUnlockCode = injectVariablesToHTML(overlaymodal, ".overlay_modal .content", unlockcodescreen)
                     overLayScreenUnlockCode = injectVariablesToHTML(overLayScreenUnlockCode, ".unlock-heading", `Rs. ${couponAmount} off on Striped Silk Blouse`)
