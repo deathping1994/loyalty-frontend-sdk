@@ -104,7 +104,7 @@
         z-index: 3;
         display: -ms-flexbox;
         display: flex;
-        font-family: 'Open Sans';
+        font-family: 'Inter', sans-serif;
     }
 
     .fw_points__overlay {
@@ -677,14 +677,18 @@
 
     .fw_points__overlay .overlay_modal {
         width: 100%;
-        height: 100%;
+        height: 60%;
         position: absolute;
-        top: 0;
+        bottom: -60%;
         left: 0;
+        background: #fff;
+        transition: all 0.5s ease;
+        box-shadow: 0px -4px 50px rgba(0, 0, 0, 0.25);
+        border-radius: 12px;
     }
 
     .fw_points__overlay .overlay_modal .unlock-coupon-card {
-        padding: 1rem;
+        padding: 22px;
     }
 
     .fw_points__overlay .overlay_modal .unlock-coupon-card .unlock-button-container {
@@ -692,32 +696,94 @@
     }
 
     .fw_points__overlay .overlay_modal .unlock-coupon-card .unlock-heading {
-        font-size: 2rem;
         margin: 0rem;
+        display: flex;
+        align-items: center;
+    }
+
+    .fw_points__overlay .overlay_modal .unlock-coupon-card .unlock-heading img {
+        width: 62px;
+        height: 62px;
+    }
+
+    .fw_points__overlay .overlay_modal .unlock-coupon-card .unlock-heading .heading-text {
+        font-weight: 700;
+        font-size: 30px;
+        margin: 0;
+        margin-left: 14px;
+    }
+
+    .fw_points__overlay .overlay_modal .unlock-coupon-card .unlock-title {
+        font-weight: 700;
+        font-size: 16px;
+        margin: 16px 0px;
+    }
+
+    .fw_points__overlay .overlay_modal .unlock-coupon-card .unlock-desc {
+        font-weight: 400;
+        font-size: 14px;
+        margin-bottom: 22px;
+    }
+
+    .fw_points__overlay .overlay_modal .unlock-coupon-card hr {
+        border: none;
+        height: 1px;
+        background: repeating-linear-gradient(90deg, #000, #000 6px, transparent 6px, transparent 12px);
     }
 
     .fw_points__overlay .overlay_modal .unlock-coupon-card .unlock-text {
-        font-size: 1.5rem;
-        font-weight: 600;
-        margin: 1rem;
+        font-weight: 700;
+        font-size: 16px;
+        margin: 22px;
     }
 
     .fw_points__overlay .overlay_modal .unlock-coupon-card .unlock-button {
         background: #000;
         color: #fff;
-        padding: 1rem 5rem;
+        padding: 11px 0px;
         border-radius: 8px;
-        font-family: 'Open Sans';
+        font-family: 'Inter', sans-serif;
         font-weight: 700;
         cursor: pointer;
+        width: 100%;
+        font-size: 14px;
     }
 
     .fw_points__overlay .overlay_modal .unlock-coupon-card .revealed-code {
-        padding: 1rem;
-        background: #E19986;
-        border-radius: 30px;
-        border: 1px solid black;
-        font-size: 1.7rem;
-        font-weight: 900;
+        padding: 12px;
+        background: #FFAAAA;
+        border-radius: 4px;
+        border: 1px dashed #000000;
+        font-size: 16px;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        position: relative;
+    }
+
+    .fw_points__overlay .overlay_modal .unlock-coupon-card .revealed-code img {
+        display: block;
+        max-width: 16px;
+        cursor: pointer;
+    }
+
+    .fw_points__overlay .overlay_modal .unlock-coupon-card .revealed-code p {
+        margin: 0;
+        width: 90%;
+    }
+
+    .fw_points__overlay .overlay_modal .unlock-coupon-card .revealed-code .copied-alert {
+        position: absolute;
+        right: 40%;
+        bottom: 75%;
+        background: #0f9800;
+        color: white;
+        width: auto;
+        padding: 1px 1px;
+        border-radius: 12px;
+        font-weight: 500;
+        transition: all .5s ease;
+        font-size: 14px;
+        display: none;
     }
 </style>

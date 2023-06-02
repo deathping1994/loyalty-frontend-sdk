@@ -8,7 +8,7 @@ import { injectVariablesToHTML } from "./utils/utils"
 (function loadfont() {
     const link = document.createElement('link');
     link.rel = 'stylesheet';
-    link.href = 'https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600&display=swap';
+    link.href = 'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap';
     document.head.appendChild(link);
 })();
 
@@ -121,12 +121,20 @@ window.onload = async function loggedIn() {
 
                     const couponAmount = event.target.getAttribute("data-coupon-amount");
 
-                    let overLayScreenUnlockCode = injectVariablesToHTML(overlaymodal, ".overlay_modal .content", unlockcodescreen)
-                    overLayScreenUnlockCode = injectVariablesToHTML(overLayScreenUnlockCode, ".unlock-heading", `Rs. ${couponAmount} off on Striped Silk Blouse`)
-                    overLayScreenUnlockCode = injectVariablesToHTML(overLayScreenUnlockCode, ".unlock-text", `Unlock for ${couponAmount} points`)
+                    let overLayScreenUnlockCode = injectVariablesToHTML(overlaymodal, ".content", unlockcodescreen)
+                    overLayScreenUnlockCode = injectVariablesToHTML(overLayScreenUnlockCode, ".unlock-heading .heading-text", `₹ ${couponAmount} Voucher`)
+                    overLayScreenUnlockCode = injectVariablesToHTML(overLayScreenUnlockCode, ".unlock-title", `Rs. ${couponAmount} off on Striped Silk Blouse`)
+                    overLayScreenUnlockCode = injectVariablesToHTML(overLayScreenUnlockCode, ".unlock-text", `Unlock for ${couponAmount} OB Coins`)
 
+                    const overlay = shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .fw_points__overlay .overlay_modal');
 
-                    shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .fw_points__overlay').innerHTML = overLayScreenUnlockCode;
+                    overlay.innerHTML = overLayScreenUnlockCode;
+
+                    (function openOverlay() {
+                        overlay.style.bottom = "0%";
+                        shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .fw_points__overlay > .header').style.opacity = 0.3;
+                        shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .fw_points__overlay > .content').style.opacity = 0.3;
+                    })();
 
                     shadowRoot.querySelector('.fw_points__overlay .overlay_modal .content .unlock-coupon-card .unlock-button').addEventListener('click', async function () {
                         const response = await fetch(`${process.env.WALLET_API_URI}/get-code`, {
@@ -141,17 +149,34 @@ window.onload = async function loggedIn() {
                             })
                         });
                         const couponData = await response.json();
-                        console.log("event.target couponCode", couponData?.data?.coupon_code);
                         shadowRoot.querySelector('.fw_points__overlay .overlay_modal .content .unlock-coupon-card .unlock-button-container').innerHTML = `
                         <p class="unlock-text">Use this code at checkout</p>
-                        <div class="revealed-code">${couponData?.data?.coupon_code}</div>
-                        `
+                        <div class="revealed-code"><p>${couponData?.data?.coupon_code}</p><img src="https://earthrhythm-media.farziengineer.co/hosted/Vector-d42544500181.png"/><p class="copied-alert">copied</p></div>
+                        `;
+                        shadowRoot.querySelector('.fw_points__overlay .overlay_modal .content .unlock-coupon-card .revealed-code img').addEventListener('click', () => {
+                            navigator.clipboard.writeText(couponData?.data?.coupon_code);
+                            const copiedBtn = shadowRoot.querySelector('.fw_points__overlay .overlay_modal .content .unlock-coupon-card .revealed-code .copied-alert');
 
+                            copiedBtn.style.display = "block";
+                            copiedBtn.style.padding = "12px 16px";
+
+                            setTimeout(() => {
+                                copiedBtn.style.padding = "1px 1px";
+                                copiedBtn.style.display = "none";
+                            }, 1500)
+                        })
                     });
 
 
                     shadowRoot.querySelector('.fw_points__overlay .overlay_modal .go-back-header .go-back-header-heading').addEventListener('click', function () {
-                        loggedIn()
+
+                        (function closeOverlay() {
+                            overlay.style.bottom = "0%";
+                            overlay.style.bottom = "-60%";
+                            shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .fw_points__overlay > .header').style.opacity = 1;
+                            shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .fw_points__overlay > .content').style.opacity = 1;
+                        })();
+
                     });
                 })
             })
