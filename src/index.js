@@ -68,9 +68,41 @@ window.onload = async function loggedIn() {
             })
         });
         const walletData = await response.json()
-        const walletAmount = walletData?.data?.data?.wallet?.amount
+        const walletAmount = walletData?.data?.data?.wallet?.amount;
 
-        const loggedInScreenHTML = injectVariablesToHTML(loggedinscreen, ".pointsBox .walletAmount", walletAmount)
+        const couponDataRes = await fetch(`${process.env.WALLET_API_URI}/get-featured-coupons`, {
+            "method": "POST",
+            "headers": {
+                "Content-Type": "application/json"
+            },
+            "body": JSON.stringify({
+                "customer_id": customer_id,
+                "user_hash": customer_tags
+            })
+        });
+
+        const couponDataReponse = await couponDataRes.json();
+        const couponData = couponDataReponse?.data;
+
+
+        let loggedInScreenHTML = injectVariablesToHTML(loggedinscreen, ".pointsBox .walletAmount", walletAmount);
+        let couponCardHTML = '';
+        couponData.forEach((couponItem, index) => {
+            couponCardHTML += `
+            <div class="card" data-coupon-idx="${index}">
+                <img data-coupon-idx="${index}"
+                    src="${couponItem?.image}" />
+                <div data-coupon-idx="${index}" class="couponDesc">
+                    <p data-coupon-idx="${index}" class="couponDesc-text">${couponItem?.title}</p>
+                    <div data-coupon-idx="${index}" class="couponValue"><span class="coins-icon"></span>
+                        <p>${couponItem?.amount}</p>
+                    </div>
+                    <div data-coupon-idx="${index}" class="floating-label">${couponItem?.label}</div>
+                </div>
+            </div>
+            `
+        });
+        loggedInScreenHTML = injectVariablesToHTML(loggedInScreenHTML, ".couponCodes .cardContainer.cardRow", couponCardHTML);
 
         const cardContainer = shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .fw_points__overlay');
         cardContainer.innerHTML = loggedInScreenHTML;
@@ -119,15 +151,17 @@ window.onload = async function loggedIn() {
 
         })();
 
-        (function redeemCodeOnClick() {
+        function redeemCodeOnClick() {
             shadowRoot.querySelectorAll('.fw_points__overlay .content .couponCodes .cardContainer.cardRow .card').forEach((element) => {
                 element.addEventListener('click', function (event) {
 
-                    const couponAmount = event.target.getAttribute("data-coupon-amount");
+                    const couponCardIndex = event.target.getAttribute("data-coupon-idx");
+                    const selectedCouponData = couponCardIndex && couponData[couponCardIndex];
+                    const couponAmount = selectedCouponData?.amount;
 
                     let overLayScreenUnlockCode = injectVariablesToHTML(overlaymodal, ".content", unlockcodescreen)
-                    overLayScreenUnlockCode = injectVariablesToHTML(overLayScreenUnlockCode, ".unlock-heading .heading-text", `₹ ${couponAmount} Voucher`)
-                    overLayScreenUnlockCode = injectVariablesToHTML(overLayScreenUnlockCode, ".unlock-title", `Rs. ${couponAmount} off on Striped Silk Blouse`)
+                    overLayScreenUnlockCode = injectVariablesToHTML(overLayScreenUnlockCode, ".unlock-heading .heading-text", `${selectedCouponData?.heading}`)
+                    overLayScreenUnlockCode = injectVariablesToHTML(overLayScreenUnlockCode, ".unlock-title", `${selectedCouponData?.title}`)
                     overLayScreenUnlockCode = injectVariablesToHTML(overLayScreenUnlockCode, ".unlock-text", `Unlock for ${couponAmount} OB Coins`)
 
                     const overlay = shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .fw_points__overlay .overlay_modal');
@@ -135,9 +169,10 @@ window.onload = async function loggedIn() {
                     overlay.innerHTML = overLayScreenUnlockCode;
 
                     (function openOverlay() {
-                        overlay.style.bottom = "0%";
-                        shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .fw_points__overlay > .header').style.opacity = 0.3;
-                        shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .fw_points__overlay > .content').style.opacity = 0.3;
+                        overlay.style.height = "60%";
+                        const backDrop = document.createElement('div');
+                        backDrop.innerHTML = `<div class="overlay_modal_backdrop"></div>`;
+                        shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .fw_points__overlay').appendChild(backDrop);
                     })();
 
                     shadowRoot.querySelector('.fw_points__overlay .overlay_modal .content .unlock-coupon-card .unlock-button').addEventListener('click', async function () {
@@ -175,23 +210,45 @@ window.onload = async function loggedIn() {
                     shadowRoot.querySelector('.fw_points__overlay .overlay_modal .go-back-header .go-back-header-heading').addEventListener('click', function () {
 
                         (function closeOverlay() {
-                            overlay.style.bottom = "0%";
-                            overlay.style.bottom = "-60%";
-                            shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .fw_points__overlay > .header').style.opacity = 1;
-                            shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .fw_points__overlay > .content').style.opacity = 1;
+                            overlay.style.height = "0%";
+                            const backDrop = shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .fw_points__overlay .overlay_modal_backdrop');
+                            backDrop.parentNode.removeChild(backDrop);
+                            overlay.innerHTML = '';
                         })();
 
                     });
                 })
             })
-        })();
+        };
+        redeemCodeOnClick();
 
         (function viewAllCoupons() {
             shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .fw_points__overlay .couponCodes .viewAllCoupons').addEventListener('click', function showViewAllCouponsScreen() {
-                const overLayScreenPointsActivity = injectVariablesToHTML(fullheightoverlaymodal, ".full_height_overlay_modal .content", `<div class="couponsScreenContainer"><h4>Coupons</h4>
-                ${couponsscreen}</div>`)
+                let couponCardHTML = '';
+                couponData.forEach((couponItem, index) => {
+                    couponCardHTML += `
+            <div class="card" data-coupon-idx="${index}">
+                <img data-coupon-idx="${index}"
+                    src="${couponItem?.image}" />
+                <div data-coupon-idx="${index}" class="couponDesc">
+                    <p data-coupon-idx="${index}" class="couponDesc-text">${couponItem?.title}</p>
+                    <div data-coupon-idx="${index}" class="couponValue"><span class="coins-icon"></span>
+                        <p>${couponItem?.amount}</p>
+                    </div>
+                    <div data-coupon-idx="${index}" class="floating-label">${couponItem?.label}</div>
+                </div>
+            </div>
+            `
+                });
+
+                let overLayScreenPointsActivity = injectVariablesToHTML(fullheightoverlaymodal, ".full_height_overlay_modal .content", `<div class="couponsScreenContainer"><h4>Coupons</h4>
+                ${couponsscreen}</div>`);
+
+                overLayScreenPointsActivity = injectVariablesToHTML(overLayScreenPointsActivity, ".couponCodes .cardContainer.cardRow", couponCardHTML);
 
                 shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .fw_points__overlay').innerHTML = overLayScreenPointsActivity;
+
+                redeemCodeOnClick();
 
                 const availableCouponsTab = shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .full_height_overlay_modal .couponsScreenContainer .top-head-tabs #available-coupons-screen');
 
@@ -204,7 +261,6 @@ window.onload = async function loggedIn() {
                 })
 
                 yourCouponsTab.addEventListener('click', () => {
-
                     const overLayScreenPointsActivityYourCoupons = injectVariablesToHTML(fullheightoverlaymodal, ".full_height_overlay_modal .content", `<div class="couponsScreenContainer"><h4>Coupons</h4>
                 ${yourcouponsscreen}</div>`)
                     shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .fw_points__overlay').innerHTML = overLayScreenPointsActivityYourCoupons;
