@@ -1,6 +1,10 @@
 import signupscreen from "./components/signup-screen.html"
 import loggedinscreen from "./components/loggedin-screen.html"
 import overlaymodal from "./components/overlay-modal.html"
+import fullheightoverlaymodal from "./components/full-height-overlay-modal.html"
+import couponsscreen from "./components/coupons-screen.html"
+import yourcouponsscreen from "./components/your-coupons-screen.html"
+
 import unlockcodescreen from "./components/unlock-code-screen.html"
 
 import { injectVariablesToHTML } from "./utils/utils"
@@ -103,11 +107,11 @@ window.onload = async function loggedIn() {
                 });
 
 
-                const overLayScreenPointsActivity = injectVariablesToHTML(overlaymodal, ".overlay_modal .content", `<div class="pointsActivityContainer"><h4>Points activity</h4>${walletPointsActivityHTML}</div>`)
+                const overLayScreenPointsActivity = injectVariablesToHTML(fullheightoverlaymodal, ".full_height_overlay_modal .content", `<div class="pointsActivityContainer"><h4>Points activity</h4>${walletPointsActivityHTML}</div>`)
 
                 shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .fw_points__overlay').innerHTML = overLayScreenPointsActivity;
 
-                shadowRoot.querySelector('.fw_points__overlay .overlay_modal .go-back-header .go-back-header-heading').addEventListener('click', function () {
+                shadowRoot.querySelector('.fw_points__overlay .full_height_overlay_modal .go-back-header .go-back-header-heading').addEventListener('click', function () {
                     loggedIn()
                 });
             });
@@ -178,6 +182,53 @@ window.onload = async function loggedIn() {
                         })();
 
                     });
+                })
+            })
+        })();
+
+        (function viewAllCoupons() {
+            shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .fw_points__overlay .couponCodes .viewAllCoupons').addEventListener('click', function showViewAllCouponsScreen() {
+                const overLayScreenPointsActivity = injectVariablesToHTML(fullheightoverlaymodal, ".full_height_overlay_modal .content", `<div class="couponsScreenContainer"><h4>Coupons</h4>
+                ${couponsscreen}</div>`)
+
+                shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .fw_points__overlay').innerHTML = overLayScreenPointsActivity;
+
+                const availableCouponsTab = shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .full_height_overlay_modal .couponsScreenContainer .top-head-tabs #available-coupons-screen');
+
+                const yourCouponsTab = shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .full_height_overlay_modal .couponsScreenContainer .top-head-tabs #your-coupons-screen');
+
+                availableCouponsTab.addEventListener('click', () => {
+                    yourCouponsTab.classList.remove("active-tab");
+                    availableCouponsTab.classList.add("active-tab");
+                    viewAllCoupons();
+                })
+
+                yourCouponsTab.addEventListener('click', () => {
+
+                    const overLayScreenPointsActivityYourCoupons = injectVariablesToHTML(fullheightoverlaymodal, ".full_height_overlay_modal .content", `<div class="couponsScreenContainer"><h4>Coupons</h4>
+                ${yourcouponsscreen}</div>`)
+                    shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .fw_points__overlay').innerHTML = overLayScreenPointsActivityYourCoupons;
+
+                    const availableCouponsTab = shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .full_height_overlay_modal .couponsScreenContainer .top-head-tabs #available-coupons-screen');
+
+                    const yourCouponsTab = shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .full_height_overlay_modal .couponsScreenContainer .top-head-tabs #your-coupons-screen');
+
+                    availableCouponsTab.classList.remove("active-tab");
+                    yourCouponsTab.classList.add("active-tab");
+
+                    availableCouponsTab.addEventListener('click', () => {
+                        const yourCouponsTab = shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .full_height_overlay_modal .couponsScreenContainer .top-head-tabs #your-coupons-screen');
+                        yourCouponsTab.className = '';
+                        availableCouponsTab.className = 'active-tab'
+                        showViewAllCouponsScreen();
+                    })
+                    shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .full_height_overlay_modal .go-back-header .close').addEventListener('click', () => {
+                        loggedIn();
+                    })
+                })
+
+                shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .full_height_overlay_modal .go-back-header .close').addEventListener('click', () => {
+                    loggedIn();
                 })
             })
         })();
