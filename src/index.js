@@ -260,10 +260,50 @@ window.onload = async function loggedIn() {
                     viewAllCoupons();
                 })
 
-                yourCouponsTab.addEventListener('click', () => {
+                yourCouponsTab.addEventListener('click', async function showYourCouponsTab() {
                     const overLayScreenPointsActivityYourCoupons = injectVariablesToHTML(fullheightoverlaymodal, ".full_height_overlay_modal .content", `<div class="couponsScreenContainer"><h4>Coupons</h4>
                 ${yourcouponsscreen}</div>`)
                     shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .fw_points__overlay').innerHTML = overLayScreenPointsActivityYourCoupons;
+
+                    const userCouponResponse = await fetch(`${process.env.WALLET_API_URI}/get-user-coupons`, {
+                        "method": "POST",
+                        "headers": {
+                            "Content-Type": "application/json"
+                        },
+                        "body": JSON.stringify({
+                            "customer_id": customer_id,
+                            "user_hash": customer_tags,
+                        })
+                    });
+
+                    const userCoupon = await userCouponResponse.json();
+                    const unlockedCoupons = userCoupon?.data?.unlocked;
+
+                    let UnlockedCouponsHTML = '';
+                    if (unlockedCoupons?.length > 0) {
+                        unlockedCoupons.forEach((couponItem) => {
+                            UnlockedCouponsHTML += `<div class="couponsContentCard">
+                                <div class="couponsContentImg">
+                                    <h5>₹${couponItem?.amount}</h5>
+                                    <p>Voucher</p>
+                                </div>
+                                <div class="couponsContentText">
+                                    <h5>${couponItem?.title}</h5>
+                                    <p>code viewed on ${couponItem?.date}</p>
+                                </div>
+                            </div>`
+                        });
+                    } else {
+                        UnlockedCouponsHTML = `
+                        <div class="no-coupons-found">
+                            <div><img src="https://earthrhythm-media.farziengineer.co/hosted/image_24-c96b6aaf23b2.png"/></div>
+                            <div><h5>Uh-Oh!</h5></div>
+                            <div><p>Looks like you haven't unlocked any coupons</p></div>
+                        </div>
+                        `
+                    }
+
+                    shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .full_height_overlay_modal .couponsScreenContainer .couponCodes .couponsContent').innerHTML = UnlockedCouponsHTML;
 
                     const availableCouponsTab = shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .full_height_overlay_modal .couponsScreenContainer .top-head-tabs #available-coupons-screen');
 
@@ -281,6 +321,81 @@ window.onload = async function loggedIn() {
                     shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .full_height_overlay_modal .go-back-header .close').addEventListener('click', () => {
                         loggedIn();
                     })
+
+
+                    const couponTabUnlocked = shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .full_height_overlay_modal .couponsScreenContainer .couponCodes .tabHead #coupon-tab-unlocked');
+                    couponTabUnlocked.addEventListener('click', () => showYourCouponsTab());
+
+                    const couponTabRedeemed = shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .full_height_overlay_modal .couponsScreenContainer .couponCodes .tabHead #coupon-tab-redeemed');
+                    couponTabRedeemed.addEventListener('click', () => {
+
+                        const redeemedCoupons = userCoupon?.data?.redeemed;
+
+                        let redeemedCouponsHTML = '';
+                        if (redeemedCoupons?.length > 0) {
+                            redeemedCoupons.forEach((couponItem) => {
+                                redeemedCouponsHTML += `<div class="couponsContentCard">
+                                <div class="couponsContentImg">
+                                    <h5>₹${couponItem?.amount}</h5>
+                                    <p>Voucher</p>
+                                </div>
+                                <div class="couponsContentText">
+                                    <h5>${couponItem?.title}</h5>
+                                    <p>code viewed on ${couponItem?.date}</p>
+                                </div>
+                            </div>`
+                            });
+                        } else {
+                            redeemedCouponsHTML = `
+                            <div class="no-coupons-found">
+                                <div><img src="https://earthrhythm-media.farziengineer.co/hosted/image_24-c96b6aaf23b2.png"/></div>
+                                <div><h5>Uh-Oh!</h5></div>
+                                <div><p>Looks like you don't have any redeemed coupons</p></div>
+                            </div>
+                            `
+                        }
+
+                        shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .full_height_overlay_modal .couponsScreenContainer .couponCodes .couponsContent').innerHTML = redeemedCouponsHTML;
+
+                        shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .full_height_overlay_modal .couponsScreenContainer .couponCodes .tabHead .active-coupons-tab').classList.remove("active-coupons-tab");
+                        couponTabRedeemed.classList.add("active-coupons-tab")
+                    });
+
+                    const couponTabGifted = shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .full_height_overlay_modal .couponsScreenContainer .couponCodes .tabHead #coupon-tab-gifted');
+                    couponTabGifted.addEventListener('click', () => {
+
+                        const giftedCoupons = userCoupon?.data?.gifted;
+
+                        let giftedCouponsHTML = '';
+                        if (giftedCoupons?.length > 0) {
+                            giftedCoupons.forEach((couponItem) => {
+                                giftedCouponsHTML += `<div class="couponsContentCard">
+                                <div class="couponsContentImg">
+                                    <h5>₹${couponItem?.amount}</h5>
+                                    <p>Voucher</p>
+                                </div>
+                                <div class="couponsContentText">
+                                    <h5>${couponItem?.title}</h5>
+                                    <p>code viewed on ${couponItem?.date}</p>
+                                </div>
+                            </div>`
+                            });
+                        } else {
+                            giftedCouponsHTML = `
+                            <div class="no-coupons-found">
+                                <div><img src="https://earthrhythm-media.farziengineer.co/hosted/image_24-c96b6aaf23b2.png"/></div>
+                                <div><h5>Uh-Oh!</h5></div>
+                                <div><p>Looks like you don't have any gifted coupons</p></div>
+                            </div>
+                            `
+                        }
+
+
+                        shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .full_height_overlay_modal .couponsScreenContainer .couponCodes .couponsContent').innerHTML = giftedCouponsHTML;
+
+                        shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .full_height_overlay_modal .couponsScreenContainer .couponCodes .tabHead .active-coupons-tab').classList.remove("active-coupons-tab");
+                        couponTabGifted.classList.add("active-coupons-tab")
+                    });
                 })
 
                 shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .full_height_overlay_modal .go-back-header .close').addEventListener('click', () => {
