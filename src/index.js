@@ -4,7 +4,7 @@ import overlaymodal from "./components/overlay-modal.html"
 import fullheightoverlaymodal from "./components/full-height-overlay-modal.html"
 import couponsscreen from "./components/coupons-screen.html"
 import yourcouponsscreen from "./components/your-coupons-screen.html"
-
+import exploregamescreen from "./components/explore-game-screen.html"
 import unlockcodescreen from "./components/unlock-code-screen.html"
 
 import { injectVariablesToHTML } from "./utils/utils"
@@ -406,6 +406,19 @@ window.onload = async function loggedIn() {
                 shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .full_height_overlay_modal .go-back-header .close').addEventListener('click', () => {
                     loggedIn();
                 })
+            })
+        })();
+
+        (function exploreWheel() {
+            shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .fw_points__overlay .gameArena #gameArenacard-wheelOfFortune .gameArenaBtn').addEventListener('click', () => {
+                let overLayScreenPointsActivity = injectVariablesToHTML(fullheightoverlaymodal, ".full_height_overlay_modal .content", `<div class="couponsScreenContainer"><h4>Wheel of Fortune</h4>
+                ${exploregamescreen}</div>`);
+
+                overLayScreenPointsActivity = injectVariablesToHTML(overLayScreenPointsActivity, ".top-head .top-head-points .points-wrapper", `${walletAmount}`);
+
+                // overLayScreenPointsActivity = injectVariablesToHTML(overLayScreenPointsActivity, ".couponCodes .cardContainer.cardRow", couponCardHTML);
+
+                shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .fw_points__overlay').innerHTML = overLayScreenPointsActivity;
             })
         })();
     }
