@@ -6,6 +6,8 @@ import couponsscreen from "./components/coupons-screen.html"
 import yourcouponsscreen from "./components/your-coupons-screen.html"
 import exploregamescreen from "./components/explore-game-screen.html"
 import unlockcodescreen from "./components/unlock-code-screen.html"
+import spinandwinscreen from "./components/spin-and-win-screen.html"
+import { drawWheel } from './spin-wheel';
 
 import { injectVariablesToHTML } from "./utils/utils"
 
@@ -419,6 +421,21 @@ window.onload = async function loggedIn() {
                 // overLayScreenPointsActivity = injectVariablesToHTML(overLayScreenPointsActivity, ".couponCodes .cardContainer.cardRow", couponCardHTML);
 
                 shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .fw_points__overlay').innerHTML = overLayScreenPointsActivity;
+
+                shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .fw_points__overlay .spinWheels .gameArenacard').addEventListener('click', async () => {
+                    shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .fw_points__overlay .full_height_overlay_modal').innerHTML = spinandwinscreen;
+
+
+                    const res1 = await fetch('https://d3js.org/d3.v3.min.js');
+                    const fileContent1 = await res1.text();
+
+                    var script1 = document.createElement('script');
+                    script1.innerHTML = fileContent1;
+
+                    shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .fw_points__overlay .full_height_overlay_modal .content .playArea').appendChild(script1);
+
+                    drawWheel(shadowRoot);
+                })
             })
         })();
     }

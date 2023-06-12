@@ -4,10 +4,12 @@ const Dotenv = require('dotenv-webpack');
 
 module.exports = {
     watch: true,
-    entry: './src/index.js', // Entry point of your JavaScript code
+    entry: {
+        'index': './src/index.js',
+    }, // Entry point of your JavaScript code
     output: {
-        path: path.resolve(__dirname, 'dist'), // Output directory
-        filename: 'bundle.js' // Output filename
+        path: path.resolve(__dirname, 'dist'),
+        filename: '[name].js'
     },
     module: {
         rules: [
