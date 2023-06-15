@@ -412,29 +412,118 @@ window.onload = async function loggedIn() {
         })();
 
         (function exploreWheel() {
-            shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .fw_points__overlay .gameArena #gameArenacard-wheelOfFortune .gameArenaBtn').addEventListener('click', () => {
+            shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .fw_points__overlay .gameArena #gameArenacard-wheelOfFortune .gameArenaBtn').addEventListener('click', async function showSpinWheels() {
                 let overLayScreenPointsActivity = injectVariablesToHTML(fullheightoverlaymodal, ".full_height_overlay_modal .content", `<div class="couponsScreenContainer"><h4>Wheel of Fortune</h4>
                 ${exploregamescreen}</div>`);
 
                 overLayScreenPointsActivity = injectVariablesToHTML(overLayScreenPointsActivity, ".top-head .top-head-points .points-wrapper", `${walletAmount}`);
 
-                // overLayScreenPointsActivity = injectVariablesToHTML(overLayScreenPointsActivity, ".couponCodes .cardContainer.cardRow", couponCardHTML);
+                const spinWheelDataRes = await fetch(`${process.env.WALLET_API_URI}/get-featured-spin-wheels`, {
+                    "method": "POST",
+                    "headers": {
+                        "Content-Type": "application/json"
+                    },
+                    "body": JSON.stringify({
+                        "customer_id": customer_id,
+                        "user_hash": customer_tags
+                    })
+                });
+
+                const spinWheelDataReponse = await spinWheelDataRes.json();
+                const spinWheelCardsData = spinWheelDataReponse?.data;
+
+                let spinWheelCardsHTML = "";
+                spinWheelCardsData.forEach((cardItem, index) => {
+                    spinWheelCardsHTML += `
+                    <div data-spin-wheel-idx="${index}" class="gameArenacard">
+                        <img data-spin-wheel-idx="${index}" src="${cardItem?.image}" />
+                        <div data-spin-wheel-idx="${index}" class="gameArenaDesc">
+                            <p data-spin-wheel-idx="${index}" class="gameArenaDesc-title">${cardItem?.title}</p>
+                            <p data-spin-wheel-idx="${index}" class="gameArenaDesc-subtitle">${cardItem?.description}</p>
+                            <div data-spin-wheel-idx="${index}" class="gameArenaDescValue"><span class="coins-icon"></span>
+                                <p data-spin-wheel-idx="${index}">${cardItem?.amount}</p>
+                            </div>
+                            <div data-spin-wheel-idx="${index}" class="gameArenaBtn">Spin</div>
+                        </div>
+                    </div>
+                    `
+                })
+
+                overLayScreenPointsActivity = injectVariablesToHTML(overLayScreenPointsActivity, ".spinWheels .cardContainer.cardRow", spinWheelCardsHTML);
 
                 shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .fw_points__overlay').innerHTML = overLayScreenPointsActivity;
 
-                shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .fw_points__overlay .spinWheels .gameArenacard').addEventListener('click', async () => {
-                    shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .fw_points__overlay .full_height_overlay_modal').innerHTML = spinandwinscreen;
+                shadowRoot.querySelectorAll('.fw_points.XXsnipcss_extracted_selector_selectionXX .fw_points__overlay .spinWheels .gameArenacard').forEach((element) => {
+                    element.addEventListener('click', async function openWheelScreen(event, spinWHeelCardIndexArg) {
+                        const spinWHeelCardIndex = event?.target?.getAttribute("data-spin-wheel-idx") || spinWHeelCardIndexArg;
+                        const selectedSpinWheelCardsData = spinWHeelCardIndex && spinWheelCardsData[spinWHeelCardIndex];
+                        const spinWheelAmount = selectedSpinWheelCardsData?.amount;
 
+                        let spinAndWinWheel = injectVariablesToHTML(spinandwinscreen, '.top-head .top-head-points .points-wrapper', `${walletAmount}`);
 
-                    const res1 = await fetch('https://d3js.org/d3.v3.min.js');
-                    const fileContent1 = await res1.text();
+                        spinAndWinWheel = injectVariablesToHTML(spinAndWinWheel, '.spin-wheel-bottom .unlock-wheel-text', `Unlock for ${spinWheelAmount} OB Coins`);
 
-                    var script1 = document.createElement('script');
-                    script1.innerHTML = fileContent1;
+                        shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .fw_points__overlay .full_height_overlay_modal').innerHTML = spinAndWinWheel;
 
-                    shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .fw_points__overlay .full_height_overlay_modal .content .playArea').appendChild(script1);
+                        const res1 = await fetch('https://d3js.org/d3.v3.min.js');
+                        const fileContent1 = await res1.text();
+                        var script1 = document.createElement('script');
+                        script1.innerHTML = fileContent1;
 
-                    drawWheel(shadowRoot);
+                        shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .fw_points__overlay .full_height_overlay_modal .content .playArea').appendChild(script1);
+
+                        drawWheel(shadowRoot, Array.from({ length: 6 }, () => ({ label: "", value: 5 })), false);
+
+                        shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .fw_points__overlay .playArea .unlock-spin-wheel-btn').addEventListener('click', async () => {
+                            const spinResponse = await fetch(`${process.env.WALLET_API_URI}/redeem-spin-wheel`, {
+                                "method": "POST",
+                                "headers": {
+                                    "Content-Type": "application/json"
+                                },
+                                "body": JSON.stringify({
+                                    "customer_id": customer_id,
+                                    "user_hash": customer_tags,
+                                    "couponAmount": spinWheelAmount
+                                })
+                            });
+                            const spinData = await spinResponse.json();
+
+                            const unlockedWheel = shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .fw_points__overlay .playArea #fw-chart-spin-wheel svg')
+                            unlockedWheel.parentNode.removeChild(unlockedWheel);
+
+                            drawWheel(shadowRoot, Array.from({ length: 6 }, () => ({ label: spinData?.data?.win_message, value: 5 })), true, () => {
+                                setTimeout(function showSpinWheelWinningPopup() {
+                                    shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .fw_points__overlay .playArea .spinned-win-modal-container .spin-win-message').innerHTML = spinData?.data?.win_message;
+
+                                    shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .fw_points__overlay .playArea .spinned-win-modal-container').style.height = "100%";
+
+                                    shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .fw_points__overlay .playArea .spinned-win-modal-container .spin-win-play-again button').addEventListener('click', () => {
+                                        openWheelScreen(null, spinWHeelCardIndex);
+                                    })
+
+                                    shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .fw_points__overlay .playArea .spinned-win-modal-container .spin-win-close button').addEventListener('click', () => {
+                                        showSpinWheels();
+                                    })
+                                }, 1000)
+
+                            });
+
+                            shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .fw_points__overlay .playArea #fw-chart-spin-wheel img').style.display = "none";
+
+                            shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .fw_points__overlay .playArea #fw-chart-spin-wheel svg').style.opacity = 1;
+
+                            shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .fw_points__overlay .playArea .unlock-wheel-text').innerHTML = "Click 'SPIN' to start";
+
+                            shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .fw_points__overlay .playArea .unlock-spin-wheel-btn').style.display = "none";
+                        })
+                        shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .full_height_overlay_modal .go-back-header .close').addEventListener('click', () => {
+                            showSpinWheels();
+                        })
+
+                    })
+                })
+                shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .full_height_overlay_modal .go-back-header .close').addEventListener('click', () => {
+                    loggedIn();
                 })
             })
         })();
