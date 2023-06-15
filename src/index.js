@@ -8,6 +8,7 @@ import exploregamescreen from "./components/explore-game-screen.html"
 import unlockcodescreen from "./components/unlock-code-screen.html"
 import spinandwinscreen from "./components/spin-and-win-screen.html"
 import { drawWheel } from './spin-wheel';
+import scratchcardscreen from "./components/scratch-card-screen.html"
 
 import { injectVariablesToHTML } from "./utils/utils"
 
@@ -523,7 +524,7 @@ window.onload = async function loggedIn() {
                     })
                 })
 
-
+                //Your coupons screen
                 const availableCouponsTab = shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .full_height_overlay_modal .couponsScreenContainer .top-head-tabs #available-coupons-screen');
 
                 const yourCouponsTab = shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .full_height_overlay_modal .couponsScreenContainer .top-head-tabs #your-coupons-screen');
@@ -594,6 +595,436 @@ window.onload = async function loggedIn() {
                         yourCouponsTab.className = '';
                         availableCouponsTab.className = 'active-tab'
                         showSpinWheels();
+                    })
+                    shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .full_height_overlay_modal .go-back-header .close').addEventListener('click', () => {
+                        loggedIn();
+                    })
+
+
+                    const couponTabUnlocked = shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .full_height_overlay_modal .couponsScreenContainer .couponCodes .tabHead #coupon-tab-unlocked');
+                    couponTabUnlocked.addEventListener('click', () => showYourCouponsTab());
+
+                    const couponTabRedeemed = shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .full_height_overlay_modal .couponsScreenContainer .couponCodes .tabHead #coupon-tab-redeemed');
+                    couponTabRedeemed.addEventListener('click', () => {
+
+                        const redeemedCoupons = userCoupon?.data?.redeemed;
+
+                        let redeemedCouponsHTML = '';
+                        if (redeemedCoupons?.length > 0) {
+                            redeemedCoupons.forEach((couponItem) => {
+                                redeemedCouponsHTML += `<div class="couponsContentCard">
+                                <div class="couponsContentImg">
+                                    <h5>₹${couponItem?.amount}</h5>
+                                    <p>Voucher</p>
+                                </div>
+                                <div class="couponsContentText">
+                                    <h5>${couponItem?.title}</h5>
+                                    <p>code viewed on ${couponItem?.date}</p>
+                                </div>
+                            </div>`
+                            });
+                        } else {
+                            redeemedCouponsHTML = `
+                            <div class="no-coupons-found">
+                                <div><img src="https://earthrhythm-media.farziengineer.co/hosted/image_24-c96b6aaf23b2.png"/></div>
+                                <div><h5>Uh-Oh!</h5></div>
+                                <div><p>Looks like you don't have any redeemed coupons</p></div>
+                            </div>
+                            `
+                        }
+
+                        shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .full_height_overlay_modal .couponsScreenContainer .couponCodes .couponsContent').innerHTML = redeemedCouponsHTML;
+
+                        shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .full_height_overlay_modal .couponsScreenContainer .couponCodes .tabHead .active-coupons-tab').classList.remove("active-coupons-tab");
+                        couponTabRedeemed.classList.add("active-coupons-tab")
+                    });
+
+                    const couponTabGifted = shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .full_height_overlay_modal .couponsScreenContainer .couponCodes .tabHead #coupon-tab-gifted');
+                    couponTabGifted.addEventListener('click', () => {
+
+                        const giftedCoupons = userCoupon?.data?.gifted;
+
+                        let giftedCouponsHTML = '';
+                        if (giftedCoupons?.length > 0) {
+                            giftedCoupons.forEach((couponItem) => {
+                                giftedCouponsHTML += `<div class="couponsContentCard">
+                                <div class="couponsContentImg">
+                                    <h5>₹${couponItem?.amount}</h5>
+                                    <p>Voucher</p>
+                                </div>
+                                <div class="couponsContentText">
+                                    <h5>${couponItem?.title}</h5>
+                                    <p>code viewed on ${couponItem?.date}</p>
+                                </div>
+                            </div>`
+                            });
+                        } else {
+                            giftedCouponsHTML = `
+                            <div class="no-coupons-found">
+                                <div><img src="https://earthrhythm-media.farziengineer.co/hosted/image_24-c96b6aaf23b2.png"/></div>
+                                <div><h5>Uh-Oh!</h5></div>
+                                <div><p>Looks like you don't have any gifted coupons</p></div>
+                            </div>
+                            `
+                        }
+
+
+                        shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .full_height_overlay_modal .couponsScreenContainer .couponCodes .couponsContent').innerHTML = giftedCouponsHTML;
+
+                        shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .full_height_overlay_modal .couponsScreenContainer .couponCodes .tabHead .active-coupons-tab').classList.remove("active-coupons-tab");
+                        couponTabGifted.classList.add("active-coupons-tab")
+                    });
+                })
+
+
+                shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .full_height_overlay_modal .go-back-header .close').addEventListener('click', () => {
+                    loggedIn();
+                })
+            })
+        })();
+
+        (function exploreScratchCards() {
+            shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .fw_points__overlay .gameArena #gameArenacard-scratchCard .gameArenaBtn').addEventListener('click', async function showScratchCards() {
+                let overLayScreenPointsActivity = injectVariablesToHTML(fullheightoverlaymodal, ".full_height_overlay_modal .content", `<div class="couponsScreenContainer"><h4>Scratch Card</h4>
+                ${exploregamescreen}</div>`);
+
+                overLayScreenPointsActivity = injectVariablesToHTML(overLayScreenPointsActivity, ".top-head .top-head-points .points-wrapper", `${walletAmount}`);
+
+                const scratchCardDataRes = await fetch(`${process.env.WALLET_API_URI}/get-featured-scratch-cards`, {
+                    "method": "POST",
+                    "headers": {
+                        "Content-Type": "application/json"
+                    },
+                    "body": JSON.stringify({
+                        "customer_id": customer_id,
+                        "user_hash": customer_tags
+                    })
+                });
+
+                const scratchCardDataResponse = await scratchCardDataRes.json();
+                const scratchCardData = scratchCardDataResponse?.data;
+
+                let scratchCardDataHTML = "";
+                scratchCardData.forEach((cardItem, index) => {
+                    scratchCardDataHTML += `
+                    <div data-scratch-card-idx="${index}" class="gameArenacard">
+                        <img data-scratch-card-idx="${index}" src="${cardItem?.image}" />
+                        <div data-scratch-card-idx="${index}" class="gameArenaDesc">
+                            <p data-scratch-card-idx="${index}" class="gameArenaDesc-title">${cardItem?.title}</p>
+                            <p data-scratch-card-idx="${index}" class="gameArenaDesc-subtitle">${cardItem?.description}</p>
+                            <div data-scratch-card-idx="${index}" class="gameArenaDescValue"><span class="coins-icon"></span>
+                                <p data-scratch-card-idx="${index}">${cardItem?.amount}</p>
+                            </div>
+                            <div data-scratch-card-idx="${index}" class="gameArenaBtn">Scratch</div>
+                        </div>
+                    </div>
+                    `
+                })
+
+                overLayScreenPointsActivity = injectVariablesToHTML(overLayScreenPointsActivity, ".spinWheels .cardContainer.cardRow", scratchCardDataHTML);
+
+                shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .fw_points__overlay').innerHTML = overLayScreenPointsActivity;
+
+                shadowRoot.querySelectorAll('.fw_points.XXsnipcss_extracted_selector_selectionXX .fw_points__overlay .spinWheels .gameArenacard').forEach((element) => {
+                    element.addEventListener('click', async function openScratchCardScreen(event, scratchCardIndexArg) {
+                        const scratchCardIndex = event?.target?.getAttribute("data-scratch-card-idx") || scratchCardIndexArg;
+                        const selectedscratchCardData = scratchCardIndex && scratchCardData[scratchCardIndex];
+                        const scratchCardAmount = selectedscratchCardData?.amount;
+
+                        let scratchCardScreenHTML = injectVariablesToHTML(scratchcardscreen, '.top-head .top-head-points .points-wrapper', `${walletAmount}`);
+
+                        scratchCardScreenHTML = injectVariablesToHTML(scratchCardScreenHTML, '.scratch-card-bottom .unlock-card-text', `Unlock for ${scratchCardAmount} OB Coins`);
+
+                        shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .fw_points__overlay .full_height_overlay_modal').innerHTML = scratchCardScreenHTML;
+
+                        (function drawLockedScratchCard() {
+                            let canvas = shadowRoot.getElementById("scratch-card-element");
+                            let context = canvas.getContext("2d");
+
+                            const init = () => {
+                                let gradientColor = context.createLinearGradient(0, 0, 135, 135);
+                                gradientColor.addColorStop(0, "#AEE7FF");
+                                gradientColor.addColorStop(1, "#AEE7FF");
+                                context.fillStyle = gradientColor;
+                                context.fillRect(0, 0, 300, 300);
+
+                                // Adding dots for seats
+                                context.fillStyle = "#94DDFF"; // Set the dot color
+
+                                const seatSize = 5; // Size of each seat
+                                const gap = 40; // Gap between seats
+
+                                const rows = 6; // Number of rows
+                                const seatsPerRow = 6; // Number of seats per row
+
+                                const startX = 30; // Starting X position
+                                const startY = 30; // Starting Y position
+
+                                for (let row = 0; row < rows; row++) {
+                                    for (let seat = 0; seat < seatsPerRow; seat++) {
+                                        const x = startX + seat * (seatSize + gap);
+                                        const y = startY + row * (seatSize + gap);
+                                        context.beginPath();
+                                        context.arc(x, y, seatSize, 0, 2 * Math.PI);
+                                        context.fill();
+                                    }
+                                }
+                            };
+
+                            window.onload = init();
+                        })();
+
+
+                        shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .fw_points__overlay .playArea .unlock-scratch-card-btn').addEventListener('click', async () => {
+                            const scratchCardResponse = await fetch(`${process.env.WALLET_API_URI}/redeem-scratch-card`, {
+                                "method": "POST",
+                                "headers": {
+                                    "Content-Type": "application/json"
+                                },
+                                "body": JSON.stringify({
+                                    "customer_id": customer_id,
+                                    "user_hash": customer_tags,
+                                    "couponAmount": scratchCardAmount
+                                })
+                            });
+                            const scratchCardData = await scratchCardResponse.json();
+
+                            shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .fw_points__overlay .playArea #fw-chart-scratch-card .scratch-card-base h4').innerHTML = scratchCardData?.data?.win_message;
+
+                            (function drawUnlockedScratchCard() {
+                                let canvas = shadowRoot.getElementById("scratch-card-element");
+                                let context = canvas.getContext("2d");
+
+                                const init = () => {
+                                    let gradientColor = context.createLinearGradient(0, 0, 135, 135);
+                                    gradientColor.addColorStop(0, "#AEE7FF");
+                                    gradientColor.addColorStop(1, "#AEE7FF");
+                                    context.fillStyle = gradientColor;
+                                    context.fillRect(0, 0, 300, 300);
+
+                                    // Adding dots for seats
+                                    context.fillStyle = "#94DDFF"; // Set the dot color
+
+                                    const seatSize = 5; // Size of each seat
+                                    const gap = 40; // Gap between seats
+
+                                    const rows = 6; // Number of rows
+                                    const seatsPerRow = 6; // Number of seats per row
+
+                                    const startX = 30; // Starting X position
+                                    const startY = 30; // Starting Y position
+
+                                    for (let row = 0; row < rows; row++) {
+                                        for (let seat = 0; seat < seatsPerRow; seat++) {
+                                            const x = startX + seat * (seatSize + gap);
+                                            const y = startY + row * (seatSize + gap);
+                                            context.beginPath();
+                                            context.arc(x, y, seatSize, 0, 2 * Math.PI);
+                                            context.fill();
+                                        }
+                                    }
+                                };
+
+                                //initially mouse X and mouse Y positions are 0
+                                let mouseX = 0;
+                                let mouseY = 0;
+                                let isDragged = false;
+
+                                //Events for touch and mouse
+                                let events = {
+                                    mouse: {
+                                        down: "mousedown",
+                                        move: "mousemove",
+                                        up: "mouseup",
+                                    },
+                                    touch: {
+                                        down: "touchstart",
+                                        move: "touchmove",
+                                        up: "touchend",
+                                    },
+                                };
+
+                                let deviceType = "";
+
+                                //Detech touch device
+                                const isTouchDevice = () => {
+                                    try {
+                                        //We try to create TouchEvent. It would fail for desktops and throw error.
+                                        document.createEvent("TouchEvent");
+                                        deviceType = "touch";
+                                        return true;
+                                    } catch (e) {
+                                        deviceType = "mouse";
+                                        return false;
+                                    }
+                                };
+
+                                //Get left and top of canvas
+                                let rectLeft = canvas.getBoundingClientRect().left;
+                                let rectTop = canvas.getBoundingClientRect().top;
+
+                                //Exact x and y position of mouse/touch
+                                const getXY = (e) => {
+                                    mouseX = (!isTouchDevice() ? e.pageX : e.touches[0].pageX) - rectLeft;
+                                    mouseY = (!isTouchDevice() ? e.pageY : e.touches[0].pageY) - rectTop;
+                                };
+
+                                isTouchDevice();
+                                //Start Scratch
+                                canvas.addEventListener(events[deviceType].down, (event) => {
+                                    isDragged = true;
+                                    //Get x and y position
+                                    getXY(event);
+                                    scratch(mouseX, mouseY);
+                                });
+
+                                //mousemove/touchmove
+                                canvas.addEventListener(events[deviceType].move, (event) => {
+                                    if (!isTouchDevice()) {
+                                        event.preventDefault();
+                                    }
+                                    if (isDragged) {
+                                        getXY(event);
+                                        scratch(mouseX, mouseY);
+                                    }
+                                });
+
+                                //stop drawing
+                                canvas.addEventListener(events[deviceType].up, () => {
+                                    isDragged = false;
+                                });
+
+                                //If mouse leaves the square
+                                canvas.addEventListener("mouseleave", () => {
+                                    isDragged = false;
+                                });
+
+                                let scratchedPixels = 0;
+                                const threshold = 460;
+                                const scratch = (x, y) => {
+                                    //destination-out draws new shapes behind the existing canvas content
+                                    context.globalCompositeOperation = "destination-out";
+                                    context.beginPath();
+                                    //arc makes circle - x,y,radius,start angle,end angle
+                                    context.arc(x, y, 12, 0, 2 * Math.PI);
+                                    context.fill();
+
+                                    const centerX = canvas.width / 2;
+                                    const centerY = canvas.height / 2;
+                                    const distanceFromCenter = Math.sqrt((x - centerX) ** 2 + (y - centerY) ** 2);
+                                    const centerAreaRadius = 200; // Radius of the center area
+
+                                    if (distanceFromCenter <= centerAreaRadius) {
+                                        // Increment the scratchedCenterAreaPixels count
+                                        scratchedPixels++;
+                                    }
+                                    if (scratchedPixels >= threshold) {
+                                        shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .fw_points__overlay .playArea .scratched-win-modal-container .scratch-win-message').innerHTML = scratchCardData?.data?.win_message;
+
+                                        shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .fw_points__overlay .playArea .scratched-win-modal-container').style.height = "100%";
+
+                                        shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .fw_points__overlay .playArea .scratched-win-modal-container .scratch-win-play-again button').addEventListener('click', () => {
+                                            openScratchCardScreen(null, scratchCardIndex);
+                                        })
+
+                                        shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .fw_points__overlay .playArea .scratched-win-modal-container .scratch-win-close button').addEventListener('click', () => {
+                                            showScratchCards();
+                                        })
+                                    }
+
+                                };
+
+                                window.onload = init();
+                            })();
+
+                            shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .fw_points__overlay .playArea #fw-chart-scratch-card img').style.display = "none";
+
+                            shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .fw_points__overlay .playArea #fw-chart-scratch-card > div').style.opacity = 1;
+
+                            shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .fw_points__overlay .playArea .unlock-card-text').innerHTML = "Click and drag your cursor across the card";
+
+                            shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .fw_points__overlay .playArea .unlock-scratch-card-btn').style.display = "none";
+                        })
+
+                        shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .full_height_overlay_modal .go-back-header .close').addEventListener('click', () => {
+                            showScratchCards();
+                        })
+
+
+                    })
+                })
+
+                //Your coupons screen
+                const availableCouponsTab = shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .full_height_overlay_modal .couponsScreenContainer .top-head-tabs #available-coupons-screen');
+
+                const yourCouponsTab = shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .full_height_overlay_modal .couponsScreenContainer .top-head-tabs #your-coupons-screen');
+
+                availableCouponsTab.addEventListener('click', () => {
+                    yourCouponsTab.classList.remove("active-tab");
+                    availableCouponsTab.classList.add("active-tab");
+                    showSpinWheels();
+                })
+
+                yourCouponsTab.addEventListener('click', async function showYourCouponsTab() {
+                    let overLayScreenPointsActivityYourCoupons = injectVariablesToHTML(fullheightoverlaymodal, ".full_height_overlay_modal .content", `<div class="couponsScreenContainer"><h4>Coupons</h4>
+                ${yourcouponsscreen}</div>`);
+
+                    overLayScreenPointsActivityYourCoupons = injectVariablesToHTML(overLayScreenPointsActivityYourCoupons, ".top-head .top-head-points .points-wrapper", `${walletAmount}`);
+
+                    shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .fw_points__overlay').innerHTML = overLayScreenPointsActivityYourCoupons;
+
+                    const userCouponResponse = await fetch(`${process.env.WALLET_API_URI}/get-user-coupons`, {
+                        "method": "POST",
+                        "headers": {
+                            "Content-Type": "application/json"
+                        },
+                        "body": JSON.stringify({
+                            "customer_id": customer_id,
+                            "user_hash": customer_tags,
+                        })
+                    });
+
+                    const userCoupon = await userCouponResponse.json();
+                    const unlockedCoupons = userCoupon?.data?.unlocked;
+
+                    let UnlockedCouponsHTML = '';
+                    if (unlockedCoupons?.length > 0) {
+                        unlockedCoupons.forEach((couponItem) => {
+                            UnlockedCouponsHTML += `<div class="couponsContentCard">
+                                <div class="couponsContentImg">
+                                    <h5>₹${couponItem?.amount}</h5>
+                                    <p>Voucher</p>
+                                </div>
+                                <div class="couponsContentText">
+                                    <h5>${couponItem?.title}</h5>
+                                    <p>code viewed on ${couponItem?.date}</p>
+                                </div>
+                            </div>`
+                        });
+                    } else {
+                        UnlockedCouponsHTML = `
+                        <div class="no-coupons-found">
+                            <div><img src="https://earthrhythm-media.farziengineer.co/hosted/image_24-c96b6aaf23b2.png"/></div>
+                            <div><h5>Uh-Oh!</h5></div>
+                            <div><p>Looks like you haven't unlocked any coupons</p></div>
+                        </div>
+                        `
+                    }
+
+                    shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .full_height_overlay_modal .couponsScreenContainer .couponCodes .couponsContent').innerHTML = UnlockedCouponsHTML;
+
+                    const availableCouponsTab = shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .full_height_overlay_modal .couponsScreenContainer .top-head-tabs #available-coupons-screen');
+
+                    const yourCouponsTab = shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .full_height_overlay_modal .couponsScreenContainer .top-head-tabs #your-coupons-screen');
+
+                    availableCouponsTab.classList.remove("active-tab");
+                    yourCouponsTab.classList.add("active-tab");
+
+                    availableCouponsTab.addEventListener('click', () => {
+                        const yourCouponsTab = shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .full_height_overlay_modal .couponsScreenContainer .top-head-tabs #your-coupons-screen');
+                        yourCouponsTab.className = '';
+                        availableCouponsTab.className = 'active-tab'
+                        showScratchCards();
                     })
                     shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .full_height_overlay_modal .go-back-header .close').addEventListener('click', () => {
                         loggedIn();

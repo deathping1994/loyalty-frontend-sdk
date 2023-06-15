@@ -1,0 +1,221 @@
+<div class="go-back-header">
+    <h4 class="go-back-header-heading"><img class="close"
+            src="https://earthrhythm-media.farziengineer.co/hosted/icons8-multiply-50-c78740eccab9.png"
+            alt="close header" width="30px"></h4>
+</div>
+<div class="content">
+    <div class="couponsScreenContainer playArea">
+        <div class="top-head">
+            <div class="top-head-points">
+                <span class="coins-icon"></span>
+                <p class="points-wrapper">0</p>
+            </div>
+        </div>
+        <div class="scratchCardHeading">
+            <h4>Scratch and Win</h4>
+        </div>
+
+        <div id="fw-chart-scratch-card" class="locked-card">
+            <img class="locked-scratch"
+                src="https://earthrhythm-media.farziengineer.co/hosted/material-symbols_lock-bd52e0f1d47b.png" />
+            <div class="scratch-card-container">
+                <div class="scratch-card-base">
+                    <h4>10 OB Coins</h4>
+                </div>
+                <canvas id="scratch-card-element" width="300" height="300"></canvas>
+            </div>
+        </div>
+
+
+        <div class="scratch-card-bottom">
+            <hr class="divider-line" />
+
+            <div class="unlock-card-text">Unlock for 10 OB Coins</div>
+            <button class="unlock-scratch-card-btn">Tap to unlock</button>
+        </div>
+
+        <div class="scratched-win-modal-container">
+            <div class="scratched-win-modal">
+                <h3>Congratulations!</h3>
+                <p>You won</p>
+                <h3 class="scratch-win-message">50 OB Coins</h3>
+                <div class="scratch-win-play-again"><button>Play Again</button></div>
+                <div class="scratch-win-close"><button>close</button></div>
+            </div>
+        </div>
+
+        <style>
+            .fw_points__overlay #fw-chart-scratch-card {
+                width: 100%;
+                height: auto;
+                min-height: 250px;
+                position: relative;
+            }
+
+            .fw_points__overlay #fw-chart-scratch-card.locked-card>div {
+                opacity: 0.7;
+            }
+
+            .fw_points__overlay #fw-chart-scratch-card.locked-card img {
+                position: absolute;
+                top: 15%;
+                left: 25%;
+                z-index: 99;
+            }
+
+            .fw_points__overlay text[text-anchor="end"] {
+                /* transform: rotateZ(-90deg) translate(12%, -35%); to be added from js*/
+                fill: #fff;
+                stroke: #fff;
+                stroke-width: 0.4px;
+                font-size: 14px;
+            }
+
+            .fw_points__overlay text {
+                cursor: pointer;
+            }
+
+            .fw_points__overlay .scratch-card-bottom {
+                padding: 20px;
+                margin-top: 30px;
+            }
+
+            .fw_points__overlay .divider-line {
+                border: none;
+                height: 1px;
+                background: repeating-linear-gradient(90deg, #000, #000 6px, transparent 6px, transparent 12px);
+            }
+
+            .fw_points__overlay .unlock-card-text {
+                font-weight: 700;
+                font-size: 16px;
+                margin: 12px 0px;
+                text-align: center;
+            }
+
+            .fw_points__overlay .unlock-scratch-card-btn {
+                background: #000;
+                color: #fff;
+                padding: 11px 0;
+                border-radius: 8px;
+                font-family: Inter, sans-serif;
+                font-weight: 700;
+                cursor: pointer;
+                width: 100%;
+                font-size: 14px;
+            }
+
+            .fw_points__overlay .scratched-win-modal-container {
+                position: absolute;
+                width: 100%;
+                height: 0%;
+                overflow: hidden;
+                transition: height 0.5s ease;
+                top: 0;
+                left: 0;
+                background: #ffffff7d;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+
+            .fw_points__overlay .scratched-win-modal-container .scratched-win-modal {
+                background: #000;
+                color: #fff;
+                padding: 30px 25px;
+                box-shadow: 0px -4px 24px rgba(0, 0, 0, .12);
+                border-radius: 12px;
+
+            }
+
+            .fw_points__overlay .scratched-win-modal-container .scratched-win-modal h3 {
+                margin: 18px 0px;
+                font-size: 18px;
+                text-align: center;
+            }
+
+            .fw_points__overlay .scratched-win-modal-container .scratched-win-modal .scratch-win-message {
+                font-size: 20px;
+            }
+
+            .fw_points__overlay .scratched-win-modal-container .scratched-win-modal>div,
+            .fw_points__overlay .scratched-win-modal-container .scratched-win-modal>p {
+                text-align: center;
+            }
+
+            .fw_points__overlay .scratched-win-modal-container .scratched-win-modal .scratch-win-play-again button {
+                width: 100%;
+                background: #fff;
+                color: #000;
+                font-family: 'Inter';
+                font-size: 14px;
+                font-weight: 600;
+                padding: 10px;
+                border-radius: 4px;
+                cursor: pointer;
+            }
+
+            .fw_points__overlay .scratched-win-modal-container .scratched-win-modal .scratch-win-close button {
+                color: #fff;
+                background: #000;
+                border: 0;
+                font-size: 14px;
+                font-weight: 500;
+                padding: 5px;
+                margin: 10px;
+                cursor: pointer;
+            }
+
+
+            .fw_points__overlay .scratch-card-container {
+                width: 100%;
+                height: auto;
+                background-color: #f5f5f5;
+                border-radius: 14px;
+                margin-top: 40px;
+            }
+
+            .fw_points__overlay .scratch-card-base,
+            .fw_points__overlay #scratch-card-element {
+                height: 300px;
+                width: 300px;
+                position: absolute;
+                transform: translate(-50%, -50%);
+                top: 50%;
+                left: 50%;
+                text-align: center;
+                cursor: grabbing;
+                border-radius: 0.3em;
+            }
+
+            .fw_points__overlay .scratch-card-base {
+                background-color: #ffffff;
+                font-family: "Poppins", sans-serif;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                box-shadow: 0 1.2em 2.5em rgba(16, 2, 96, 0.15);
+            }
+
+            .fw_points__overlay .scratch-card-base h3 {
+                font-weight: 600;
+                font-size: 1.5em;
+                color: #17013b;
+            }
+
+            .fw_points__overlay .scratch-card-base h4 {
+                font-weight: 400;
+                color: #746e7e;
+            }
+
+            .fw_points__overlay #scratch-card-element {
+                -webkit-tap-highlight-color: transparent;
+                -webkit-touch-callout: none;
+                -webkit-user-select: none;
+                user-select: none;
+            }
+        </style>
+
+    </div>
+</div>
