@@ -7,11 +7,11 @@ import yourcouponsscreen from "./components/your-coupons-screen.html"
 import exploregamescreen from "./components/explore-game-screen.html"
 import exploregamescreen2 from "./components/explore-game-screen.html"
 import exploregamescreen3 from "./components/explore-game-screen.html"
-
 import unlockcodescreen from "./components/unlock-code-screen.html"
 import spinandwinscreen from "./components/spin-and-win-screen.html"
 import { drawWheel } from './spin-wheel';
 import scratchcardscreen from "./components/scratch-card-screen.html"
+import inviteandearnpopup from "./components/invite-and-earn-popup.html"
 
 import { injectVariablesToHTML } from "./utils/utils"
 
@@ -113,6 +113,7 @@ window.onload = async function loggedIn() {
         const cardContainer = shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .fw_points__overlay');
         cardContainer.innerHTML = loggedInScreenHTML;
 
+        shadowRoot.querySelector('.fw_points__overlay.show_overlay').style.overflowY = "scroll";
 
         (function showPointsHistory() {
             shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .fw_points__overlay .cardWrapper.points').addEventListener('click', function () {
@@ -176,9 +177,13 @@ window.onload = async function loggedIn() {
 
                     (function openOverlay() {
                         overlay.style.height = "60%";
+                        const scrolled = shadowRoot.querySelector('.fw_points__overlay.show_overlay').scrollTop;
+                        overlay.style.bottom = `-${scrolled}px`;
                         const backDrop = document.createElement('div');
                         backDrop.innerHTML = `<div class="overlay_modal_backdrop"></div>`;
                         shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .fw_points__overlay').appendChild(backDrop);
+                        shadowRoot.querySelector('.fw_points__overlay.show_overlay').style.overflowY = "hidden";
+
                     })();
 
                     shadowRoot.querySelector('.fw_points__overlay .overlay_modal .content .unlock-coupon-card .unlock-button').addEventListener('click', async function () {
@@ -217,9 +222,12 @@ window.onload = async function loggedIn() {
 
                         (function closeOverlay() {
                             overlay.style.height = "0%";
+                            overlay.style.bottom = "-120%";
                             const backDrop = shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .fw_points__overlay .overlay_modal_backdrop');
                             backDrop.parentNode.removeChild(backDrop);
                             overlay.innerHTML = '';
+                            shadowRoot.querySelector('.fw_points__overlay.show_overlay').style.overflowY = "scroll";
+
                         })();
 
                     });
@@ -1311,6 +1319,69 @@ window.onload = async function loggedIn() {
                     loggedIn();
                 })
             })
+        })();
+
+        (function inviteFriends() {
+            shadowRoot.querySelector('.fw_points__overlay .content .invite-friends-wrapper .invite-friends-button button').addEventListener('click', async () => {
+
+                let overLayScreenUnlockCode = injectVariablesToHTML(overlaymodal, ".content", inviteandearnpopup)
+
+                const overlay = shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .fw_points__overlay .overlay_modal');
+
+                overlay.innerHTML = overLayScreenUnlockCode;
+
+                (function openOverlay() {
+                    overlay.style.height = "82%";
+                    const scrolled = shadowRoot.querySelector('.fw_points__overlay.show_overlay').scrollTop;
+                    overlay.style.bottom = `-${scrolled}px`;
+                    const backDrop = document.createElement('div');
+                    backDrop.innerHTML = `<div class="overlay_modal_backdrop"></div>`;
+                    shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .fw_points__overlay').appendChild(backDrop);
+
+                    shadowRoot.querySelector('.fw_points__overlay.show_overlay').style.overflowY = "hidden";
+                })();
+
+                const referralCodeRes = await fetch(`${process.env.WALLET_API_URI}/get-referral-code`, {
+                    "method": "POST",
+                    "headers": {
+                        "Content-Type": "application/json"
+                    },
+                    "body": JSON.stringify({
+                        "customer_id": customer_id,
+                        "user_hash": customer_tags,
+                    })
+                });
+                const referralCodeData = await referralCodeRes.json();
+                const referralCode = referralCodeData?.data?.referral_code;
+
+                shadowRoot.querySelector('.fw_points__overlay .overlay_modal .invite-and-earn-popup .revealed-code p').innerHTML = referralCode;
+
+                shadowRoot.querySelector('.fw_points__overlay .overlay_modal .content .unlock-coupon-card .revealed-code img').addEventListener('click', () => {
+                    navigator.clipboard.writeText(referralCode);
+                    const copiedBtn = shadowRoot.querySelector('.fw_points__overlay .overlay_modal .content .unlock-coupon-card.invite-and-earn-popup .revealed-code .copied-alert');
+
+                    copiedBtn.style.display = "block";
+                    copiedBtn.style.padding = "12px 16px";
+
+                    setTimeout(() => {
+                        copiedBtn.style.padding = "1px 1px";
+                        copiedBtn.style.display = "none";
+                    }, 1500)
+                })
+
+                shadowRoot.querySelector('.fw_points__overlay .overlay_modal .go-back-header .go-back-header-heading').addEventListener('click', function () {
+
+                    (function closeOverlay() {
+                        overlay.style.height = "0%";
+                        overlay.style.bottom = "-120%";
+                        const backDrop = shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .fw_points__overlay .overlay_modal_backdrop');
+                        backDrop.parentNode.removeChild(backDrop);
+                        overlay.innerHTML = '';
+                        shadowRoot.querySelector('.fw_points__overlay.show_overlay').style.overflowY = "scroll";
+                    })();
+
+                });
+            });
         })();
     }
 }
