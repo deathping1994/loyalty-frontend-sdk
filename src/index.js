@@ -61,6 +61,7 @@ window.onload = async function loggedIn() {
     const mainScript = document.querySelector('#fc-wallet-19212');
     const customer_id = mainScript.getAttribute('data-customer-id');
     const customer_tags = mainScript.getAttribute('data-customer-tag')?.trim();
+    const client_id = mainScript.getAttribute('data-client-id');
 
     if (customer_id && customer_tags) {
         const response = await fetch(`${process.env.WALLET_API_URI}/walletlogs`, {
@@ -69,8 +70,9 @@ window.onload = async function loggedIn() {
                 "Content-Type": "application/json"
             },
             "body": JSON.stringify({
-                "customer_id": customer_id,
-                "user_hash": customer_tags
+                customer_id: customer_id,
+                user_hash: customer_tags,
+                client_id: client_id
             })
         });
         const walletData = await response.json()
@@ -83,7 +85,8 @@ window.onload = async function loggedIn() {
             },
             "body": JSON.stringify({
                 "customer_id": customer_id,
-                "user_hash": customer_tags
+                "user_hash": customer_tags,
+                "client_id": client_id
             })
         });
 
@@ -195,7 +198,8 @@ window.onload = async function loggedIn() {
                             "body": JSON.stringify({
                                 "customer_id": customer_id,
                                 "user_hash": customer_tags,
-                                "couponAmount": couponAmount
+                                "couponAmount": couponAmount,
+                                "client_id": client_id
                             })
                         });
                         const couponData = await response.json();
@@ -292,6 +296,7 @@ window.onload = async function loggedIn() {
                         "body": JSON.stringify({
                             "customer_id": customer_id,
                             "user_hash": customer_tags,
+                            "client_id": client_id
                         })
                     });
 
@@ -437,7 +442,8 @@ window.onload = async function loggedIn() {
                     },
                     "body": JSON.stringify({
                         "customer_id": customer_id,
-                        "user_hash": customer_tags
+                        "user_hash": customer_tags,
+                        "client_id": client_id
                     })
                 });
 
@@ -495,7 +501,9 @@ window.onload = async function loggedIn() {
                                 "body": JSON.stringify({
                                     "customer_id": customer_id,
                                     "user_hash": customer_tags,
-                                    "couponAmount": spinWheelAmount
+                                    "couponAmount": spinWheelAmount,
+                                    "client_id": client_id
+
                                 })
                             });
                             const spinData = await spinResponse.json();
@@ -562,6 +570,7 @@ window.onload = async function loggedIn() {
                         "body": JSON.stringify({
                             "customer_id": customer_id,
                             "user_hash": customer_tags,
+                            "client_id": client_id
                         })
                     });
 
@@ -708,7 +717,8 @@ window.onload = async function loggedIn() {
                     },
                     "body": JSON.stringify({
                         "customer_id": customer_id,
-                        "user_hash": customer_tags
+                        "user_hash": customer_tags,
+                        "client_id": client_id
                     })
                 });
 
@@ -795,7 +805,8 @@ window.onload = async function loggedIn() {
                                 "body": JSON.stringify({
                                     "customer_id": customer_id,
                                     "user_hash": customer_tags,
-                                    "couponAmount": scratchCardAmount
+                                    "couponAmount": scratchCardAmount,
+                                    "client_id": client_id
                                 })
                             });
                             const scratchCardData = await scratchCardResponse.json();
@@ -993,6 +1004,7 @@ window.onload = async function loggedIn() {
                         "body": JSON.stringify({
                             "customer_id": customer_id,
                             "user_hash": customer_tags,
+                            "client_id": client_id
                         })
                     });
 
@@ -1189,6 +1201,7 @@ window.onload = async function loggedIn() {
                         "body": JSON.stringify({
                             "customer_id": customer_id,
                             "user_hash": customer_tags,
+                            "client_id": client_id
                         })
                     });
 
@@ -1349,6 +1362,7 @@ window.onload = async function loggedIn() {
                     "body": JSON.stringify({
                         "customer_id": customer_id,
                         "user_hash": customer_tags,
+                        "client_id": client_id
                     })
                 });
                 const referralCodeData = await referralCodeRes.json();
@@ -1383,6 +1397,48 @@ window.onload = async function loggedIn() {
                 });
             });
         })();
+    } else if (client_id) {
+        const couponDataRes = await fetch(`${process.env.WALLET_API_URI}/get-featured-coupons`, {
+            "method": "POST",
+            "headers": {
+                "Content-Type": "application/json"
+            },
+            "body": JSON.stringify({
+                "client_id": client_id
+            })
+        });
+
+        const couponDataReponse = await couponDataRes.json();
+        const couponData = couponDataReponse?.data;
+
+
+        let loggedInScreenHTML = injectVariablesToHTML(loggedinscreen, ".pointsBox .walletAmount", "0");
+        let couponCardHTML = '';
+        couponData.forEach((couponItem, index) => {
+            couponCardHTML += `
+            <div class="card" data-coupon-idx="${index}">
+                <img data-coupon-idx="${index}"
+                    src="${couponItem?.image}" />
+                <div data-coupon-idx="${index}" class="couponDesc">
+                    <p data-coupon-idx="${index}" class="couponDesc-text">${couponItem?.title}</p>
+                    <div data-coupon-idx="${index}" class="couponValue"><span class="coins-icon"></span>
+                        <p>${couponItem?.amount}</p>
+                    </div>
+                    <div data-coupon-idx="${index}" class="floating-label">${couponItem?.label}</div>
+                </div>
+            </div>
+            `
+        });
+        loggedInScreenHTML = injectVariablesToHTML(loggedInScreenHTML, ".couponCodes .cardContainer.cardRow", couponCardHTML);
+
+        const cardContainer = shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .fw_points__overlay');
+        cardContainer.innerHTML = loggedInScreenHTML;
+
+
+        shadowRoot.querySelector('.fw_points__overlay.show_overlay .content').addEventListener('click', function openSignInPopup() {
+            shadowRoot.querySelector('.fw_points__overlay.show_overlay .content').removeEventListener('click', openSignInPopup);
+            location.href = "/account/login";
+        })
     }
 }
 
