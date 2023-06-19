@@ -1504,6 +1504,17 @@ window.onload = async function loggedIn() {
         const cardContainer = shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .fw_points__overlay');
         cardContainer.innerHTML = loggedInScreenHTML;
 
+        shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .fw_points__overlay .content .points .dropDown').innerHTML = `
+        <div class="dropDown__content">
+            <div>
+                <p class="">Login to access points</p>
+            </div>
+        </div>
+        <div class="pointsBox">
+            <p class="walletAmount">Login</p>
+        </div>`;
+        shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .fw_points__overlay .content .points .dropDown .pointsBox .walletAmount').style.padding = "0px 8px";
+
         shadowRoot.querySelector('.fw_points__overlay.show_overlay .header #header-close')?.addEventListener('click', () => {
             const cardContainer = shadowRoot.getElementById('card-container');
 
