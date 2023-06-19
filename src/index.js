@@ -61,14 +61,22 @@ document.body.appendChild(container);
     closeBtn?.addEventListener('click', closeWidgetPopup);
 })();
 
-function showLoadingScreen() {
-    const loadingBackDrop = document.createElement('div');
-    loadingBackDrop.innerHTML = `${loadingscreen}`;
-    shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .fw_points__overlay').appendChild(loadingBackDrop);
+function showLoadingScreen(showLoader) {
+    if (showLoader) {
+        const loadingBackDrop = document.createElement('div');
+        loadingBackDrop.innerHTML = `${loadingscreen}`;
+        shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .fw_points__overlay')?.appendChild(loadingBackDrop);
+        const scrolled = shadowRoot?.querySelector('.fw_points__overlay.show_overlay')?.scrollTop;
+        shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .fw_points__overlay .fw-loading-screen-wrapper').style.top = `${scrolled}px`;
+    } else {
+        const loadingBackDrop = shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .fw_points__overlay .fw-loading-screen-wrapper');
+        loadingBackDrop?.parentNode?.removeChild(loadingBackDrop);
+    }
+
 }
 
 window.onload = async function loggedIn() {
-    showLoadingScreen();
+    showLoadingScreen(true);
     const mainScript = document.querySelector('#fc-wallet-19212');
     const customer_id = mainScript.getAttribute('data-customer-id');
     const customer_tags = mainScript.getAttribute('data-customer-tag')?.trim();
@@ -211,6 +219,7 @@ window.onload = async function loggedIn() {
                     })();
 
                     shadowRoot.querySelector('.fw_points__overlay .overlay_modal .content .unlock-coupon-card .unlock-button').addEventListener('click', async function () {
+                        showLoadingScreen(true);
                         const response = await fetch(`${process.env.WALLET_API_URI}/get-code`, {
                             "method": "POST",
                             "headers": {
@@ -228,6 +237,7 @@ window.onload = async function loggedIn() {
                         <p class="unlock-text">Use this code at checkout</p>
                         <div class="revealed-code"><p>${couponData?.data?.coupon_code}</p><img src="https://earthrhythm-media.farziengineer.co/hosted/Vector-d42544500181.png"/><p class="copied-alert">copied</p></div>
                         `;
+                        showLoadingScreen(false);
                         shadowRoot.querySelector('.fw_points__overlay .overlay_modal .content .unlock-coupon-card .revealed-code img').addEventListener('click', () => {
                             navigator.clipboard.writeText(couponData?.data?.coupon_code);
                             const copiedBtn = shadowRoot.querySelector('.fw_points__overlay .overlay_modal .content .unlock-coupon-card .revealed-code .copied-alert');
@@ -309,6 +319,8 @@ window.onload = async function loggedIn() {
 
                     shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .fw_points__overlay').innerHTML = overLayScreenPointsActivityYourCoupons;
 
+                    showLoadingScreen(true);
+
                     const userCouponResponse = await fetch(`${process.env.WALLET_API_URI}/get-user-coupons`, {
                         "method": "POST",
                         "headers": {
@@ -323,6 +335,8 @@ window.onload = async function loggedIn() {
 
                     const userCoupon = await userCouponResponse.json();
                     const unlockedCoupons = userCoupon?.data?.unlocked;
+
+                    showLoadingScreen(false);
 
                     let UnlockedCouponsHTML = '';
                     if (unlockedCoupons?.length > 0) {
@@ -456,6 +470,8 @@ window.onload = async function loggedIn() {
 
                 overLayScreenPointsActivity = injectVariablesToHTML(overLayScreenPointsActivity, ".top-head .top-head-points .points-wrapper", `${walletAmount}`);
 
+                showLoadingScreen(true);
+
                 const spinWheelDataRes = await fetch(`${process.env.WALLET_API_URI}/get-featured-spin-wheels`, {
                     "method": "POST",
                     "headers": {
@@ -470,6 +486,8 @@ window.onload = async function loggedIn() {
 
                 const spinWheelDataReponse = await spinWheelDataRes.json();
                 const spinWheelCardsData = spinWheelDataReponse?.data;
+
+                showLoadingScreen(false);
 
                 let spinWheelCardsHTML = "";
                 spinWheelCardsData.forEach((cardItem, index) => {
@@ -504,6 +522,8 @@ window.onload = async function loggedIn() {
 
                         shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .fw_points__overlay .full_height_overlay_modal').innerHTML = spinAndWinWheel;
 
+                        showLoadingScreen(true);
+
                         const res1 = await fetch('https://d3js.org/d3.v3.min.js');
                         const fileContent1 = await res1.text();
                         var script1 = document.createElement('script');
@@ -513,7 +533,10 @@ window.onload = async function loggedIn() {
 
                         drawWheel(shadowRoot, Array.from({ length: 6 }, () => ({ label: "", value: 5 })), false);
 
+                        showLoadingScreen(false);
+
                         shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .fw_points__overlay .playArea .unlock-spin-wheel-btn').addEventListener('click', async () => {
+                            showLoadingScreen(true);
                             const spinResponse = await fetch(`${process.env.WALLET_API_URI}/redeem-spin-wheel`, {
                                 "method": "POST",
                                 "headers": {
@@ -556,6 +579,8 @@ window.onload = async function loggedIn() {
                             shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .fw_points__overlay .playArea .unlock-wheel-text').innerHTML = "Click 'SPIN' to start";
 
                             shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .fw_points__overlay .playArea .unlock-spin-wheel-btn').style.display = "none";
+
+                            showLoadingScreen(false);
                         })
                         shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .full_height_overlay_modal .go-back-header .close').addEventListener('click', () => {
                             showSpinWheels();
@@ -583,6 +608,8 @@ window.onload = async function loggedIn() {
 
                     shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .fw_points__overlay').innerHTML = overLayScreenPointsActivityYourCoupons;
 
+                    showLoadingScreen(true);
+
                     const userCouponResponse = await fetch(`${process.env.WALLET_API_URI}/get-user-coupons`, {
                         "method": "POST",
                         "headers": {
@@ -597,6 +624,8 @@ window.onload = async function loggedIn() {
 
                     const userCoupon = await userCouponResponse.json();
                     const unlockedCoupons = userCoupon?.data?.unlocked;
+
+                    showLoadingScreen(false);
 
                     let UnlockedCouponsHTML = '';
                     if (unlockedCoupons?.length > 0) {
@@ -731,6 +760,8 @@ window.onload = async function loggedIn() {
 
                 overLayScreenPointsActivity = injectVariablesToHTML(overLayScreenPointsActivity, ".top-head .top-head-points .points-wrapper", `${walletAmount}`);
 
+                showLoadingScreen(true);
+
                 const scratchCardDataRes = await fetch(`${process.env.WALLET_API_URI}/get-featured-scratch-cards`, {
                     "method": "POST",
                     "headers": {
@@ -745,6 +776,8 @@ window.onload = async function loggedIn() {
 
                 const scratchCardDataResponse = await scratchCardDataRes.json();
                 const scratchCardData = scratchCardDataResponse?.data;
+
+                showLoadingScreen(false);
 
                 let scratchCardDataHTML = "";
                 scratchCardData.forEach((cardItem, index) => {
@@ -818,6 +851,7 @@ window.onload = async function loggedIn() {
 
 
                         shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .fw_points__overlay .playArea .unlock-scratch-card-btn').addEventListener('click', async () => {
+                            showLoadingScreen(true);
                             const scratchCardResponse = await fetch(`${process.env.WALLET_API_URI}/redeem-scratch-card`, {
                                 "method": "POST",
                                 "headers": {
@@ -833,6 +867,8 @@ window.onload = async function loggedIn() {
                             const scratchCardData = await scratchCardResponse.json();
 
                             shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .fw_points__overlay .playArea #fw-chart-scratch-card .scratch-card-base h4').innerHTML = scratchCardData?.data?.win_message;
+
+                            showLoadingScreen(false);
 
                             (function drawUnlockedScratchCard() {
                                 let canvas = shadowRoot.getElementById("scratch-card-element");
@@ -1017,6 +1053,8 @@ window.onload = async function loggedIn() {
 
                     shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .fw_points__overlay').innerHTML = overLayScreenPointsActivityYourCoupons;
 
+                    showLoadingScreen(true);
+
                     const userCouponResponse = await fetch(`${process.env.WALLET_API_URI}/get-user-coupons`, {
                         "method": "POST",
                         "headers": {
@@ -1031,6 +1069,8 @@ window.onload = async function loggedIn() {
 
                     const userCoupon = await userCouponResponse.json();
                     const unlockedCoupons = userCoupon?.data?.unlocked;
+
+                    showLoadingScreen(false);
 
                     let UnlockedCouponsHTML = '';
                     if (unlockedCoupons?.length > 0) {
@@ -1214,6 +1254,8 @@ window.onload = async function loggedIn() {
 
                     shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .fw_points__overlay').innerHTML = overLayScreenPointsActivityYourCoupons;
 
+                    showLoadingScreen(true);
+
                     const userCouponResponse = await fetch(`${process.env.WALLET_API_URI}/get-user-coupons`, {
                         "method": "POST",
                         "headers": {
@@ -1228,6 +1270,8 @@ window.onload = async function loggedIn() {
 
                     const userCoupon = await userCouponResponse.json();
                     const unlockedCoupons = userCoupon?.data?.unlocked;
+
+                    showLoadingScreen(false);
 
                     let UnlockedCouponsHTML = '';
                     if (unlockedCoupons?.length > 0) {
@@ -1375,6 +1419,8 @@ window.onload = async function loggedIn() {
                     shadowRoot.querySelector('.fw_points__overlay.show_overlay').style.overflowY = "hidden";
                 })();
 
+                showLoadingScreen(true);
+
                 const referralCodeRes = await fetch(`${process.env.WALLET_API_URI}/get-referral-code`, {
                     "method": "POST",
                     "headers": {
@@ -1390,6 +1436,8 @@ window.onload = async function loggedIn() {
                 const referralCode = referralCodeData?.data?.referral_code;
 
                 shadowRoot.querySelector('.fw_points__overlay .overlay_modal .invite-and-earn-popup .revealed-code p').innerHTML = referralCode;
+
+                showLoadingScreen(false);
 
                 shadowRoot.querySelector('.fw_points__overlay .overlay_modal .content .unlock-coupon-card .revealed-code img').addEventListener('click', () => {
                     navigator.clipboard.writeText(referralCode);
@@ -1419,6 +1467,7 @@ window.onload = async function loggedIn() {
             });
         })();
     } else if (client_id) {
+
         const couponDataRes = await fetch(`${process.env.WALLET_API_URI}/get-featured-coupons`, {
             "method": "POST",
             "headers": {
