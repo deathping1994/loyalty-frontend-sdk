@@ -83,7 +83,7 @@ window.onload = async function loggedIn() {
     const client_id = mainScript.getAttribute('data-client-id');
 
     if (customer_id && customer_tags) {
-        const response = await fetch(`${process.env.WALLET_API_URI}/walletlogs`, {
+        const response = await fetch(`${process.env.WALLET_API_URI}/mock-walletlogs`, {
             "method": "POST",
             "headers": {
                 "Content-Type": "application/json"
