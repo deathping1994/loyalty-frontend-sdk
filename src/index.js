@@ -12,7 +12,7 @@ import spinandwinscreen from "./components/spin-and-win-screen.html"
 import { drawWheel } from './spin-wheel';
 import scratchcardscreen from "./components/scratch-card-screen.html"
 import inviteandearnpopup from "./components/invite-and-earn-popup.html"
-
+import loadingscreen from "./components/loading-screen.html"
 import { injectVariablesToHTML } from "./utils/utils"
 
 (function loadfont() {
@@ -61,7 +61,14 @@ document.body.appendChild(container);
     closeBtn?.addEventListener('click', closeWidgetPopup);
 })();
 
+function showLoadingScreen() {
+    const loadingBackDrop = document.createElement('div');
+    loadingBackDrop.innerHTML = `${loadingscreen}`;
+    shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .fw_points__overlay').appendChild(loadingBackDrop);
+}
+
 window.onload = async function loggedIn() {
+    showLoadingScreen();
     const mainScript = document.querySelector('#fc-wallet-19212');
     const customer_id = mainScript.getAttribute('data-customer-id');
     const customer_tags = mainScript.getAttribute('data-customer-tag')?.trim();
