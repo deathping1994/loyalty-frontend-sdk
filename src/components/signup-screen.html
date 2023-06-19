@@ -1,5 +1,3 @@
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <div
     class="fw_points XXsnipcss_extracted_selector_selectionXX tether-target-attached-top tether-element-attached-top tether-element-attached-center tether-target-attached-center">
     <div id="card-container" class="fw_points__overlay show_overlay" style="display: none;">
@@ -8,54 +6,46 @@
                 src="https://earthrhythm-media.farziengineer.co/hosted/icons8-multiply-50-c78740eccab9.png"
                 alt="close header" width="30px">
             <div class="">
-                <h1 class="heading">Login to access</h1>
-                <p>fw Wallet</p>
+                <h1 class="heading"></h1>
+                <p></p>
             </div>
         </div>
-        <div class="content">
-            <div class="cardWrapper">
-                <h1 class="">Become a part of the fw Family</h1>
-                <p class="">Earn wallet points every time you purchase. Unlock exciting discounts.</p>
-                <a class="joinBtn" target="_blank" rel="noopener noreferrer" href="/account/register"> Join now </a>
-                <p class="">Already have an account? <a href="/account/login" class="">Sign in</a></p>
+        <div class="content loading-content">
+            <div class="loading-screen-container">
+                <main class="loading-screen">
+                    <svg class="ip" viewBox="0 0 256 128" width="120px" height="60px"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <linearGradient id="grad1" x1="0" y1="0" x2="1" y2="0">
+                                <stop offset="0%" stop-color="#5ebd3e" />
+                                <stop offset="33%" stop-color="#ffb900" />
+                                <stop offset="67%" stop-color="#f78200" />
+                                <stop offset="100%" stop-color="#e23838" />
+                            </linearGradient>
+                            <linearGradient id="grad2" x1="1" y1="0" x2="0" y2="0">
+                                <stop offset="0%" stop-color="#e23838" />
+                                <stop offset="33%" stop-color="#973999" />
+                                <stop offset="67%" stop-color="#009cdf" />
+                                <stop offset="100%" stop-color="#5ebd3e" />
+                            </linearGradient>
+                        </defs>
+                        <g fill="none" stroke-linecap="round" stroke-width="16">
+                            <g class="ip__track" stroke="#ddd">
+                                <path d="M8,64s0-56,60-56,60,112,120,112,60-56,60-56" />
+                                <path d="M248,64s0-56-60-56-60,112-120,112S8,64,8,64" />
+                            </g>
+                            <g stroke-dasharray="180 656">
+                                <path class="ip__worm1" stroke="url(#grad1)" stroke-dashoffset="0"
+                                    d="M8,64s0-56,60-56,60,112,120,112,60-56,60-56" />
+                                <path class="ip__worm2" stroke="url(#grad2)" stroke-dashoffset="358"
+                                    d="M248,64s0-56-60-56-60,112-120,112S8,64,8,64" />
+                            </g>
+                        </g>
+                    </svg>
+                    <p>Loading, please wait...</p>
+                </main>
             </div>
-            <div class="cardWrapper">
-                <h1 class="">wallet points</h1>
-                <p class="">Earn more wallet points for different actions, and turn those wallet points into awesome
-                    rewards!</p>
-                <div class="dropDown">
-                    <div class="dropDown__content">
-                        <p class="">way to earn </p>
-                    </div>
-                    <div class="">
-                        <svg width="34" height="34" viewBox="0 0 34 34" fill="none" xmlns="http://www.w3.org/2000/svg"
-                            class="">
-                            <circle cx="17" cy="17" r="17" fill="white"></circle>
-                            <path d="M14 11C14.3 11.3 18.125 15.125 20 17L14 23" stroke="#2C2C2C" stroke-width="2"
-                                stroke-linecap="round"></path>
-                        </svg>
-                    </div>
-                </div>
-                <div class="dropDown">
-                    <div class="dropDown__content">
-                        <p class="">way to redeem </p>
-                    </div>
-                    <div class="">
-                        <svg width="34" height="34" viewBox="0 0 34 34" fill="none" xmlns="http://www.w3.org/2000/svg"
-                            class="">
-                            <circle cx="17" cy="17" r="17" fill="white"></circle>
-                            <path d="M14 11C14.3 11.3 18.125 15.125 20 17L14 23" stroke="#2C2C2C" stroke-width="2"
-                                stroke-linecap="round"></path>
-                        </svg>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="powered-by-content">
-            <span class="powered-by-content__text">powered By</span>
-            <div class="scss_ImageWrapper___u3k0" style="display: flex; align-items: center; justify-content: center;">
-                <img src="https://wowshopify.farziengineer.co/felogo.png" style="width:5rem">
-            </div>
+
         </div>
     </div>
     <div id="widget-container" class="fw_points__gifting">
@@ -66,6 +56,85 @@
 </div>
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600&display=swap');
+
+    .fw_points__overlay .loading-screen-container {
+        color: hsl(223, 90%, 5%);
+        font: 1em/1.5 sans-serif;
+        height: 100%;
+        display: grid;
+        place-items: center;
+        transition: background-color 0.3s;
+    }
+
+    .fw_points__overlay .loading-content {
+        height: 100%;
+    }
+
+    main.loading-screen {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        grid-gap: 22px;
+        font-size: 14px;
+        color: grey;
+    }
+
+    .loading-screen .ip {
+        width: 120;
+        height: 60;
+    }
+
+    .loading-screen .ip__track {
+        stroke: hsl(223, 90%, 90%);
+        transition: stroke 0.3s;
+    }
+
+    .loading-screen .ip__worm1,
+    .loading-screen .ip__worm2 {
+        animation: worm1 2s linear infinite;
+    }
+
+    .loading-screen .ip__worm2 {
+        animation-name: worm2;
+    }
+
+    /* Animation */
+    @keyframes worm1 {
+        from {
+            stroke-dashoffset: 0;
+        }
+
+        50% {
+            animation-timing-function: steps(1);
+            stroke-dashoffset: -358;
+        }
+
+        50.01% {
+            animation-timing-function: linear;
+            stroke-dashoffset: 358;
+        }
+
+        to {
+            stroke-dashoffset: 0;
+        }
+    }
+
+    @keyframes worm2 {
+        from {
+            stroke-dashoffset: 358;
+        }
+
+        50% {
+            stroke-dashoffset: 0;
+        }
+
+        to {
+            stroke-dashoffset: -358;
+        }
+    }
 
     * {
         padding: 0;
@@ -207,7 +276,6 @@
         grid-gap: 20px;
         gap: 20px;
         padding-bottom: 2rem;
-        min-height: 19.5rem
     }
 
     .fw_points__overlay .content,

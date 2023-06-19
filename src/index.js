@@ -39,6 +39,7 @@ document.body.appendChild(container);
     var widgetButton = shadowRoot.getElementById('widget-container');
     var cardContainer = shadowRoot.getElementById('card-container');
     var headerClose = shadowRoot.getElementById('header-close');
+    var closeBtn = shadowRoot.querySelector('.fw_points__overlay.show_overlay .header .header-close');
 
     widgetButton.addEventListener('click', function () {
         if (cardContainer.style.display === 'none') {
@@ -48,13 +49,16 @@ document.body.appendChild(container);
         }
     });
 
-    headerClose.addEventListener('click', function () {
+    function closeWidgetPopup() {
         if (cardContainer.style.display === 'none') {
             cardContainer.style.display = 'block';
         } else {
             cardContainer.style.display = 'none';
         }
-    });
+    }
+
+    headerClose.addEventListener('click', closeWidgetPopup);
+    closeBtn?.addEventListener('click', closeWidgetPopup);
 })();
 
 window.onload = async function loggedIn() {
@@ -115,6 +119,16 @@ window.onload = async function loggedIn() {
 
         const cardContainer = shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .fw_points__overlay');
         cardContainer.innerHTML = loggedInScreenHTML;
+
+        shadowRoot.querySelector('.fw_points__overlay.show_overlay .header #header-close')?.addEventListener('click', () => {
+            const cardContainer = shadowRoot.getElementById('card-container');
+
+            if (cardContainer.style.display === 'none') {
+                cardContainer.style.display = 'block';
+            } else {
+                cardContainer.style.display = 'none';
+            }
+        })
 
         shadowRoot.querySelector('.fw_points__overlay.show_overlay').style.overflowY = "scroll";
 
@@ -1434,6 +1448,15 @@ window.onload = async function loggedIn() {
         const cardContainer = shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .fw_points__overlay');
         cardContainer.innerHTML = loggedInScreenHTML;
 
+        shadowRoot.querySelector('.fw_points__overlay.show_overlay .header #header-close')?.addEventListener('click', () => {
+            const cardContainer = shadowRoot.getElementById('card-container');
+
+            if (cardContainer.style.display === 'none') {
+                cardContainer.style.display = 'block';
+            } else {
+                cardContainer.style.display = 'none';
+            }
+        })
 
         shadowRoot.querySelector('.fw_points__overlay.show_overlay .content').addEventListener('click', function openSignInPopup() {
             shadowRoot.querySelector('.fw_points__overlay.show_overlay .content').removeEventListener('click', openSignInPopup);
