@@ -235,7 +235,7 @@ window.onload = async function loggedIn() {
                         const couponData = await response.json();
                         shadowRoot.querySelector('.fw_points__overlay .overlay_modal .content .unlock-coupon-card .unlock-button-container').innerHTML = `
                         <p class="unlock-text">Use this code at checkout</p>
-                        <div class="revealed-code"><p>${couponData?.data?.coupon_code}</p><img src="https://earthrhythm-media.farziengineer.co/hosted/Vector-d42544500181.png"/><p class="copied-alert">copied</p></div>
+                        <div class="revealed-code"><p>${couponData?.data?.coupon_code}</p><img src="https://media.farziengineer.co/farziwallet/copy-icon.png"/><p class="copied-alert">copied</p></div>
                         `;
                         showLoadingScreen(false);
                         shadowRoot.querySelector('.fw_points__overlay .overlay_modal .content .unlock-coupon-card .revealed-code img').addEventListener('click', () => {
@@ -355,7 +355,7 @@ window.onload = async function loggedIn() {
                     } else {
                         UnlockedCouponsHTML = `
                         <div class="no-coupons-found">
-                            <div><img src="https://earthrhythm-media.farziengineer.co/hosted/image_24-c96b6aaf23b2.png"/></div>
+                            <div><img src="https://media.farziengineer.co/farziwallet/no-coupons.png"/></div>
                             <div><h5>Uh-Oh!</h5></div>
                             <div><p>Looks like you haven't unlocked any coupons</p></div>
                         </div>
@@ -442,7 +442,7 @@ window.onload = async function loggedIn() {
                         } else {
                             giftedCouponsHTML = `
                             <div class="no-coupons-found">
-                                <div><img src="https://earthrhythm-media.farziengineer.co/hosted/image_24-c96b6aaf23b2.png"/></div>
+                                <div><img src="https://media.farziengineer.co/farziwallet/no-coupons.png"/></div>
                                 <div><h5>Uh-Oh!</h5></div>
                                 <div><p>Looks like you don't have any gifted coupons</p></div>
                             </div>
@@ -644,7 +644,7 @@ window.onload = async function loggedIn() {
                     } else {
                         UnlockedCouponsHTML = `
                         <div class="no-coupons-found">
-                            <div><img src="https://earthrhythm-media.farziengineer.co/hosted/image_24-c96b6aaf23b2.png"/></div>
+                            <div><img src="https://media.farziengineer.co/farziwallet/no-coupons.png"/></div>
                             <div><h5>Uh-Oh!</h5></div>
                             <div><p>Looks like you haven't unlocked any coupons</p></div>
                         </div>
@@ -696,7 +696,7 @@ window.onload = async function loggedIn() {
                         } else {
                             redeemedCouponsHTML = `
                             <div class="no-coupons-found">
-                                <div><img src="https://earthrhythm-media.farziengineer.co/hosted/image_24-c96b6aaf23b2.png"/></div>
+                                <div><img src="https://media.farziengineer.co/farziwallet/no-coupons.png"/></div>
                                 <div><h5>Uh-Oh!</h5></div>
                                 <div><p>Looks like you don't have any redeemed coupons</p></div>
                             </div>
@@ -731,7 +731,7 @@ window.onload = async function loggedIn() {
                         } else {
                             giftedCouponsHTML = `
                             <div class="no-coupons-found">
-                                <div><img src="https://earthrhythm-media.farziengineer.co/hosted/image_24-c96b6aaf23b2.png"/></div>
+                                <div><img src="https://media.farziengineer.co/farziwallet/no-coupons.png"/></div>
                                 <div><h5>Uh-Oh!</h5></div>
                                 <div><p>Looks like you don't have any gifted coupons</p></div>
                             </div>
@@ -1089,7 +1089,7 @@ window.onload = async function loggedIn() {
                     } else {
                         UnlockedCouponsHTML = `
                         <div class="no-coupons-found">
-                            <div><img src="https://earthrhythm-media.farziengineer.co/hosted/image_24-c96b6aaf23b2.png"/></div>
+                            <div><img src="https://media.farziengineer.co/farziwallet/no-coupons.png"/></div>
                             <div><h5>Uh-Oh!</h5></div>
                             <div><p>Looks like you haven't unlocked any coupons</p></div>
                         </div>
@@ -1141,7 +1141,7 @@ window.onload = async function loggedIn() {
                         } else {
                             redeemedCouponsHTML = `
                             <div class="no-coupons-found">
-                                <div><img src="https://earthrhythm-media.farziengineer.co/hosted/image_24-c96b6aaf23b2.png"/></div>
+                                <div><img src="https://media.farziengineer.co/farziwallet/no-coupons.png"/></div>
                                 <div><h5>Uh-Oh!</h5></div>
                                 <div><p>Looks like you don't have any redeemed coupons</p></div>
                             </div>
@@ -1176,7 +1176,7 @@ window.onload = async function loggedIn() {
                         } else {
                             giftedCouponsHTML = `
                             <div class="no-coupons-found">
-                                <div><img src="https://earthrhythm-media.farziengineer.co/hosted/image_24-c96b6aaf23b2.png"/></div>
+                                <div><img src="https://media.farziengineer.co/farziwallet/no-coupons.png"/></div>
                                 <div><h5>Uh-Oh!</h5></div>
                                 <div><p>Looks like you don't have any gifted coupons</p></div>
                             </div>
@@ -1209,7 +1209,7 @@ window.onload = async function loggedIn() {
                 const lottoQuizCardData = [{
                     title: "Lotto Quiz",
                     description: "Win upto 30 OB Coins",
-                    image: "https://earthrhythm-media.farziengineer.co/hosted/image_10-18d83e52d14a.png",
+                    image: "https://media.farziengineer.co/farziwallet/lotto.png",
                     amount: 10
                 }];
 
@@ -1290,7 +1290,7 @@ window.onload = async function loggedIn() {
                     } else {
                         UnlockedCouponsHTML = `
                         <div class="no-coupons-found">
-                            <div><img src="https://earthrhythm-media.farziengineer.co/hosted/image_24-c96b6aaf23b2.png"/></div>
+                            <div><img src=""/></div>
                             <div><h5>Uh-Oh!</h5></div>
                             <div><p>Looks like you haven't unlocked any coupons</p></div>
                         </div>
@@ -1342,7 +1342,7 @@ window.onload = async function loggedIn() {
                         } else {
                             redeemedCouponsHTML = `
                             <div class="no-coupons-found">
-                                <div><img src="https://earthrhythm-media.farziengineer.co/hosted/image_24-c96b6aaf23b2.png"/></div>
+                                <div><img src="https://media.farziengineer.co/farziwallet/no-coupons.png"/></div>
                                 <div><h5>Uh-Oh!</h5></div>
                                 <div><p>Looks like you don't have any redeemed coupons</p></div>
                             </div>
@@ -1377,7 +1377,7 @@ window.onload = async function loggedIn() {
                         } else {
                             giftedCouponsHTML = `
                             <div class="no-coupons-found">
-                                <div><img src="https://earthrhythm-media.farziengineer.co/hosted/image_24-c96b6aaf23b2.png"/></div>
+                                <div><img src="https://media.farziengineer.co/farziwallet/no-coupons.png"/></div>
                                 <div><h5>Uh-Oh!</h5></div>
                                 <div><p>Looks like you don't have any gifted coupons</p></div>
                             </div>
