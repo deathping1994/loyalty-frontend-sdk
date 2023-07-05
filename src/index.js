@@ -75,6 +75,22 @@ function showLoadingScreen(showLoader) {
 
 }
 
+function showAlertPopup(message, severity) {
+    var alertElement = document.createElement('div');
+    alertElement.className = 'fw-wallet-alert-popup';
+
+    if (severity === "error") {
+        alertElement.innerHTML = `<svg focusable="false" class="fw-wallet-alert-popup-error" aria-hidden="true" viewBox="0 0 24 24" data-testid="ErrorOutlineIcon"><path d="M11 15h2v2h-2zm0-8h2v6h-2zm.99-5C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z"></path></svg>
+        <p>${message}</p>`;
+    }
+
+    shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .fw_points__overlay').appendChild(alertElement);
+
+    setTimeout(function () {
+        alertElement.remove();
+    }, 3000);
+}
+
 window.onload = async function loggedIn() {
     showLoadingScreen(true);
     const mainScript = document.querySelector('#fc-wallet-19212');
@@ -95,7 +111,7 @@ window.onload = async function loggedIn() {
             })
         });
         const walletData = await response.json()
-        const walletAmount = walletData?.data?.data?.wallet?.amount;
+        let walletAmount = walletData?.data?.data?.wallet?.amount;
 
         const couponDataRes = await fetch(`${process.env.WALLET_API_URI}/get-featured-coupons`, {
             "method": "POST",
@@ -233,23 +249,52 @@ window.onload = async function loggedIn() {
                             })
                         });
                         const couponData = await response.json();
-                        shadowRoot.querySelector('.fw_points__overlay .overlay_modal .content .unlock-coupon-card .unlock-button-container').innerHTML = `
+                        if (couponData?.status !== "success") {
+                            if (couponData?.error?.includes("insufficient")) {
+                                showAlertPopup("insufficient funds", "error");
+                            } else {
+                                showAlertPopup("something went wrong", "error");
+                            }
+                            showLoadingScreen(false);
+                        } else {
+                            shadowRoot.querySelector('.fw_points__overlay .overlay_modal .content .unlock-coupon-card .unlock-button-container').innerHTML = `
                         <p class="unlock-text">Use this code at checkout</p>
                         <div class="revealed-code"><p>${couponData?.data?.coupon_code}</p><img src="https://media.farziengineer.co/farziwallet/copy-icon.png"/><p class="copied-alert">copied</p></div>
                         `;
-                        showLoadingScreen(false);
-                        shadowRoot.querySelector('.fw_points__overlay .overlay_modal .content .unlock-coupon-card .revealed-code img').addEventListener('click', () => {
-                            navigator.clipboard.writeText(couponData?.data?.coupon_code);
-                            const copiedBtn = shadowRoot.querySelector('.fw_points__overlay .overlay_modal .content .unlock-coupon-card .revealed-code .copied-alert');
+                            showLoadingScreen(false);
+                            shadowRoot.querySelector('.fw_points__overlay .overlay_modal .content .unlock-coupon-card .revealed-code img').addEventListener('click', () => {
+                                navigator.clipboard.writeText(couponData?.data?.coupon_code);
+                                const copiedBtn = shadowRoot.querySelector('.fw_points__overlay .overlay_modal .content .unlock-coupon-card .revealed-code .copied-alert');
 
-                            copiedBtn.style.display = "block";
-                            copiedBtn.style.padding = "12px 16px";
+                                copiedBtn.style.display = "block";
+                                copiedBtn.style.padding = "12px 16px";
 
-                            setTimeout(() => {
-                                copiedBtn.style.padding = "1px 1px";
-                                copiedBtn.style.display = "none";
-                            }, 1500)
-                        })
+                                setTimeout(() => {
+                                    copiedBtn.style.padding = "1px 1px";
+                                    copiedBtn.style.display = "none";
+                                }, 1500)
+                            })
+
+                            const response = await fetch(`${process.env.WALLET_API_URI}/mock-walletlogs`, {
+                                "method": "POST",
+                                "headers": {
+                                    "Content-Type": "application/json"
+                                },
+                                "body": JSON.stringify({
+                                    customer_id: customer_id,
+                                    user_hash: customer_tags,
+                                    client_id: client_id
+                                })
+                            });
+                            const walletData = await response.json()
+                            walletAmount = walletData?.data?.data?.wallet?.amount;
+                            if (shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .fw_points__overlay .cardWrapper.points .pointsBox .walletAmount')) {
+                                shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .fw_points__overlay .cardWrapper.points .pointsBox .walletAmount').innerHTML = walletAmount;
+                            } else if (shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .fw_points__overlay .top-head-points .points-wrapper')) {
+                                shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .fw_points__overlay .top-head-points .points-wrapper').innerHTML = walletAmount;
+                            }
+                        }
+
                     });
 
 

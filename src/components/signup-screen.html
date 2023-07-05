@@ -2,8 +2,7 @@
     class="fw_points XXsnipcss_extracted_selector_selectionXX tether-target-attached-top tether-element-attached-top tether-element-attached-center tether-target-attached-center">
     <div id="card-container" class="fw_points__overlay show_overlay" style="display: none;">
         <div class="header">
-            <img id="header-close" class="close"
-                src="https://media.farziengineer.co/farziwallet/cross.png"
+            <img id="header-close" class="close" src="https://media.farziengineer.co/farziwallet/cross.png"
                 alt="close header" width="30px">
             <div class="">
                 <h1 class="heading"></h1>
@@ -316,7 +315,7 @@
 
     .fw_points__overlay .content .cardWrapper.points {
         background-color: #000;
-        padding: 1.2rem 1.3rem;
+        padding: 12px 13px;
         border-radius: 16px;
         box-shadow: none;
         margin: 0px 14px;
@@ -340,7 +339,7 @@
         background-color: #fff;
         border-radius: 4px;
         margin: 0px 6px;
-        padding: 0.5rem 1rem;
+        padding: 5px 10px;
         display: flex;
         justify-content: center;
         align-items: center;
@@ -669,8 +668,8 @@
     .fw_points__overlay .content .cardContainer.cardRow .card {
         border-radius: 12px;
         color: #000;
-        font-size: 1.4rem;
-        line-height: 2rem;
+        font-size: 14px;
+        line-height: 20px;
         cursor: pointer;
     }
 
@@ -1318,5 +1317,29 @@
         left: 0%;
         width: 100%;
         background: #ffffffb8;
+    }
+
+    .fw_points__overlay .fw-wallet-alert-popup {
+        position: absolute;
+        bottom: 20%;
+        left: 25%;
+        z-index: 999;
+        background: #160b0b;
+        color: #f4c7c7;
+        font-weight: 400;
+        font-size: 14px;
+        border-radius: 4px;
+        padding: 8px 22px;
+        transition: 0.5s all ease;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .fw_points__overlay .fw-wallet-alert-popup svg.fw-wallet-alert-popup-error {
+        width: 22px;
+        height: 22px;
+        fill: rgb(244, 67, 54);
+        margin-right: 8px;
     }
 </style>
