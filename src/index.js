@@ -81,7 +81,7 @@ function showAlertPopup(message, severity) {
 
     if (severity === "error") {
         alertElement.innerHTML = `<svg focusable="false" class="fw-wallet-alert-popup-error" aria-hidden="true" viewBox="0 0 24 24" data-testid="ErrorOutlineIcon"><path d="M11 15h2v2h-2zm0-8h2v6h-2zm.99-5C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z"></path></svg>
-        <p>${message}</p>`;
+        <p>${message || "something went wrong"}</p>`;
     }
 
     shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .fw_points__overlay').appendChild(alertElement);
@@ -597,11 +597,17 @@ window.onload = async function loggedIn() {
                             });
                             const spinData = await spinResponse.json();
 
+                            if (spinData?.status !== "success") {
+                                showLoadingScreen(false);
+                                showAlertPopup(spinData?.error, "error");
+                                return;
+                            }
+
                             const unlockedWheel = shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .fw_points__overlay .playArea #fw-chart-spin-wheel svg')
                             unlockedWheel.parentNode.removeChild(unlockedWheel);
 
                             drawWheel(shadowRoot, Array.from({ length: 6 }, () => ({ label: spinData?.data?.win_message, value: 5 })), true, () => {
-                                setTimeout(function showSpinWheelWinningPopup() {
+                                setTimeout(async function showSpinWheelWinningPopup() {
                                     shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .fw_points__overlay .playArea .spinned-win-modal-container .spin-win-message').innerHTML = spinData?.data?.win_message;
 
                                     shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .fw_points__overlay .playArea .spinned-win-modal-container').style.height = "100%";
@@ -613,6 +619,22 @@ window.onload = async function loggedIn() {
                                     shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .fw_points__overlay .playArea .spinned-win-modal-container .spin-win-close button').addEventListener('click', () => {
                                         showSpinWheels();
                                     })
+                                    const response = await fetch(`${process.env.WALLET_API_URI}/mock-walletlogs`, {
+                                        "method": "POST",
+                                        "headers": {
+                                            "Content-Type": "application/json"
+                                        },
+                                        "body": JSON.stringify({
+                                            customer_id: customer_id,
+                                            user_hash: customer_tags,
+                                            client_id: client_id
+                                        })
+                                    });
+                                    const walletData = await response.json()
+                                    walletAmount = walletData?.data?.data?.wallet?.amount;
+                                    if (shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .fw_points__overlay .top-head-points .points-wrapper')) {
+                                        shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .fw_points__overlay .top-head-points .points-wrapper').innerHTML = walletAmount;
+                                    }
                                 }, 1000)
 
                             });
@@ -911,6 +933,12 @@ window.onload = async function loggedIn() {
                             });
                             const scratchCardData = await scratchCardResponse.json();
 
+                            if (scratchCardData?.status !== "success") {
+                                showLoadingScreen(false);
+                                showAlertPopup(scratchCardData?.error, "error");
+                                return;
+                            }
+
                             shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .fw_points__overlay .playArea #fw-chart-scratch-card .scratch-card-base h4').innerHTML = scratchCardData?.data?.win_message;
 
                             showLoadingScreen(false);
@@ -1025,7 +1053,8 @@ window.onload = async function loggedIn() {
 
                                 let scratchedPixels = 0;
                                 const threshold = 460;
-                                const scratch = (x, y) => {
+                                let cardScratchable = true;
+                                const scratch = async (x, y) => {
                                     //destination-out draws new shapes behind the existing canvas content
                                     context.globalCompositeOperation = "destination-out";
                                     context.beginPath();
@@ -1042,7 +1071,10 @@ window.onload = async function loggedIn() {
                                         // Increment the scratchedCenterAreaPixels count
                                         scratchedPixels++;
                                     }
-                                    if (scratchedPixels >= threshold) {
+                                    if (scratchedPixels >= threshold && cardScratchable) {
+                                        // card scratch completed
+                                        cardScratchable = false;
+
                                         shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .fw_points__overlay .playArea .scratched-win-modal-container .scratch-win-message').innerHTML = scratchCardData?.data?.win_message;
 
                                         shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .fw_points__overlay .playArea .scratched-win-modal-container').style.height = "100%";
@@ -1052,9 +1084,24 @@ window.onload = async function loggedIn() {
                                         })
 
                                         shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .fw_points__overlay .playArea .scratched-win-modal-container .scratch-win-close button').addEventListener('click', () => {
-                                            //TODO ERROR-- RUNNING MULITPLE TIMES WHEN CLICKED ONLY ONCE
                                             showScratchCards();
                                         })
+                                        const response = await fetch(`${process.env.WALLET_API_URI}/mock-walletlogs`, {
+                                            "method": "POST",
+                                            "headers": {
+                                                "Content-Type": "application/json"
+                                            },
+                                            "body": JSON.stringify({
+                                                customer_id: customer_id,
+                                                user_hash: customer_tags,
+                                                client_id: client_id
+                                            })
+                                        });
+                                        const walletData = await response.json()
+                                        walletAmount = walletData?.data?.data?.wallet?.amount;
+                                        if (shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .fw_points__overlay .top-head-points .points-wrapper')) {
+                                            shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .fw_points__overlay .top-head-points .points-wrapper').innerHTML = walletAmount;
+                                        }
                                     }
 
                                 };
