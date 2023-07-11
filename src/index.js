@@ -501,7 +501,8 @@ window.onload = async function loggedIn() {
                                 </div>
                                 <div class="couponsContentText">
                                     <h5>${couponItem?.title}</h5>
-                                    <p>code viewed on ${couponItem?.date}</p>
+                                    <div class="couponCodeContainer"><p>code:</p><h5>${couponItem?.coupon}</h5></div>
+                                    <p>created on ${couponItem?.date}</p>
                                 </div>
                             </div>`
                         });
@@ -553,7 +554,8 @@ window.onload = async function loggedIn() {
                                 </div>
                                 <div class="couponsContentText">
                                     <h5>${couponItem?.title}</h5>
-                                    <p>code viewed on ${couponItem?.date}</p>
+                                    <div class="couponCodeContainer"><p>code:</p><h5>${couponItem?.coupon}</h5></div>
+                                    <p>created on ${couponItem?.date}</p>
                                 </div>
                             </div>`
                             });
@@ -588,7 +590,8 @@ window.onload = async function loggedIn() {
                                 </div>
                                 <div class="couponsContentText">
                                     <h5>${couponItem?.title}</h5>
-                                    <p>code viewed on ${couponItem?.date}</p>
+                                    <div class="couponCodeContainer"><p>code:</p><h5>${couponItem?.coupon}</h5></div>
+                                    <p>created on ${couponItem?.date}</p>
                                 </div>
                             </div>`
                             });
@@ -812,7 +815,8 @@ window.onload = async function loggedIn() {
                                 </div>
                                 <div class="couponsContentText">
                                     <h5>${couponItem?.title}</h5>
-                                    <p>code viewed on ${couponItem?.date}</p>
+                                    <div class="couponCodeContainer"><p>code:</p><h5>${couponItem?.coupon}</h5></div>
+                                    <p>created on ${couponItem?.date}</p>
                                 </div>
                             </div>`
                         });
@@ -864,7 +868,8 @@ window.onload = async function loggedIn() {
                                 </div>
                                 <div class="couponsContentText">
                                     <h5>${couponItem?.title}</h5>
-                                    <p>code viewed on ${couponItem?.date}</p>
+                                    <div class="couponCodeContainer"><p>code:</p><h5>${couponItem?.coupon}</h5></div>
+                                    <p>created on ${couponItem?.date}</p>
                                 </div>
                             </div>`
                             });
@@ -899,7 +904,8 @@ window.onload = async function loggedIn() {
                                 </div>
                                 <div class="couponsContentText">
                                     <h5>${couponItem?.title}</h5>
-                                    <p>code viewed on ${couponItem?.date}</p>
+                                    <div class="couponCodeContainer"><p>code:</p><h5>${couponItem?.coupon}</h5></div>
+                                    <p>created on ${couponItem?.date}</p>
                                 </div>
                             </div>`
                             });
@@ -1282,7 +1288,8 @@ window.onload = async function loggedIn() {
                                 </div>
                                 <div class="couponsContentText">
                                     <h5>${couponItem?.title}</h5>
-                                    <p>code viewed on ${couponItem?.date}</p>
+                                    <div class="couponCodeContainer"><p>code:</p><h5>${couponItem?.coupon}</h5></div>
+                                    <p>created on ${couponItem?.date}</p>
                                 </div>
                             </div>`
                         });
@@ -1334,7 +1341,8 @@ window.onload = async function loggedIn() {
                                 </div>
                                 <div class="couponsContentText">
                                     <h5>${couponItem?.title}</h5>
-                                    <p>code viewed on ${couponItem?.date}</p>
+                                    <div class="couponCodeContainer"><p>code:</p><h5>${couponItem?.coupon}</h5></div>
+                                    <p>created on ${couponItem?.date}</p>
                                 </div>
                             </div>`
                             });
@@ -1369,7 +1377,8 @@ window.onload = async function loggedIn() {
                                 </div>
                                 <div class="couponsContentText">
                                     <h5>${couponItem?.title}</h5>
-                                    <p>code viewed on ${couponItem?.date}</p>
+                                    <div class="couponCodeContainer"><p>code:</p><h5>${couponItem?.coupon}</h5></div>
+                                    <p>created on ${couponItem?.date}</p>
                                 </div>
                             </div>`
                             });
@@ -1483,7 +1492,8 @@ window.onload = async function loggedIn() {
                                 </div>
                                 <div class="couponsContentText">
                                     <h5>${couponItem?.title}</h5>
-                                    <p>code viewed on ${couponItem?.date}</p>
+                                    <div class="couponCodeContainer"><p>code:</p><h5>${couponItem?.coupon}</h5></div>
+                                    <p>created on ${couponItem?.date}</p>
                                 </div>
                             </div>`
                         });
@@ -1535,7 +1545,8 @@ window.onload = async function loggedIn() {
                                 </div>
                                 <div class="couponsContentText">
                                     <h5>${couponItem?.title}</h5>
-                                    <p>code viewed on ${couponItem?.date}</p>
+                                    <div class="couponCodeContainer"><p>code:</p><h5>${couponItem?.coupon}</h5></div>
+                                    <p>created on ${couponItem?.date}</p>
                                 </div>
                             </div>`
                             });
@@ -1570,7 +1581,8 @@ window.onload = async function loggedIn() {
                                 </div>
                                 <div class="couponsContentText">
                                     <h5>${couponItem?.title}</h5>
-                                    <p>code viewed on ${couponItem?.date}</p>
+                                    <div class="couponCodeContainer"><p>code:</p><h5>${couponItem?.coupon}</h5></div>
+                                    <p>created on ${couponItem?.date}</p>
                                 </div>
                             </div>`
                             });
