@@ -76,6 +76,33 @@ function showLoadingScreen(showLoader) {
 
 }
 
+async function setTheme({ client_id }) {
+    const themeDetailsRes = await fetch(`${process.env.WALLET_API_URI}/get-theme-details`, {
+        "method": "POST",
+        "headers": {
+            "Content-Type": "application/json"
+        },
+        "body": JSON.stringify({
+            client_id: client_id
+        })
+    });
+    const themeDetails = await themeDetailsRes.json();
+
+    var cssVariablesScope = shadowRoot.querySelector('.fw_points__overlay');
+
+    if (cssVariablesScope && themeDetails?.data?.theme_color) {
+
+        cssVariablesScope.style.setProperty('--loyalty_popup_theme_background', themeDetails?.data?.theme_color);
+
+        const encodedColor = encodeURIComponent(themeDetails?.data?.theme_color);
+
+        cssVariablesScope.style.setProperty('--coin-svg-url', `url("data:image/svg+xml,%3Csvg width='24' height='24' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='12' cy='12' r='12' fill='${encodedColor}'/%3E%3Cpath d='M11.6003 6.28047C11.6301 6.19829 11.6845 6.12728 11.7561 6.0771C11.8277 6.02692 11.913 6 12.0004 6C12.0879 6 12.1732 6.02692 12.2448 6.0771C12.3164 6.12728 12.3708 6.19829 12.4006 6.28047L12.8076 7.39245C13.1264 8.2644 13.6316 9.05626 14.2881 9.71274C14.9446 10.3692 15.7364 10.8745 16.6084 11.1933L17.7195 11.6003C17.8017 11.6301 17.8727 11.6845 17.9229 11.7561C17.9731 11.8277 18 11.913 18 12.0004C18 12.0879 17.9731 12.1732 17.9229 12.2448C17.8727 12.3164 17.8017 12.3708 17.7195 12.4006L16.6084 12.8076C15.7364 13.1264 14.9446 13.6316 14.2881 14.2881C13.6316 14.9446 13.1264 15.7364 12.8076 16.6084L12.4006 17.7195C12.3708 17.8017 12.3164 17.8727 12.2448 17.9229C12.1732 17.9731 12.0879 18 12.0004 18C11.913 18 11.8277 17.9731 11.7561 17.9229C11.6845 17.8727 11.6301 17.8017 11.6003 17.7195L11.1933 16.6084C10.8745 15.7364 10.3692 14.9446 9.71274 14.2881C9.05626 13.6316 8.2644 13.1264 7.39245 12.8076L6.28047 12.4006C6.19829 12.3708 6.12728 12.3164 6.0771 12.2448C6.02692 12.1732 6 12.0879 6 12.0004C6 11.913 6.02692 11.8277 6.0771 11.7561C6.12728 11.6845 6.19829 11.6301 6.28047 11.6003L7.39245 11.1933C8.2644 10.8745 9.05626 10.3692 9.71274 9.71274C10.3692 9.05626 10.8745 8.2644 11.1933 7.39245L11.6003 6.28047Z' fill='white'/%3E%3C/svg%3E%0A")`);
+
+        cssVariablesScope.style.setProperty('--coin-svg-inverted-url', `url("data:image/svg+xml,%3Csvg width='24' height='24' viewBox='0 0 19 19' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='9.5' cy='9.5' r='9.5' fill='white'/%3E%3Cpath d='M9.18353 4.97204C9.20715 4.90698 9.25022 4.85076 9.3069 4.81104C9.36358 4.77131 9.43112 4.75 9.50034 4.75C9.56955 4.75 9.63709 4.77131 9.69377 4.81104C9.75045 4.85076 9.79353 4.90698 9.81714 4.97204L10.1393 5.85236C10.3917 6.54265 10.7917 7.16954 11.3114 7.68925C11.8311 8.20896 12.458 8.60897 13.1483 8.86133L14.028 9.18353C14.093 9.20715 14.1492 9.25022 14.189 9.3069C14.2287 9.36358 14.25 9.43112 14.25 9.50034C14.25 9.56955 14.2287 9.63709 14.189 9.69377C14.1492 9.75045 14.093 9.79353 14.028 9.81714L13.1483 10.1393C12.458 10.3917 11.8311 10.7917 11.3114 11.3114C10.7917 11.8311 10.3917 12.458 10.1393 13.1483L9.81714 14.028C9.79353 14.093 9.75045 14.1492 9.69377 14.189C9.63709 14.2287 9.56955 14.25 9.50034 14.25C9.43112 14.25 9.36358 14.2287 9.3069 14.189C9.25022 14.1492 9.20715 14.093 9.18353 14.028L8.86133 13.1483C8.60897 12.458 8.20896 11.8311 7.68925 11.3114C7.16954 10.7917 6.54265 10.3917 5.85236 10.1393L4.97204 9.81714C4.90698 9.79353 4.85076 9.75045 4.81104 9.69377C4.77131 9.63709 4.75 9.56955 4.75 9.50034C4.75 9.43112 4.77131 9.36358 4.81104 9.3069C4.85076 9.25022 4.90698 9.20715 4.97204 9.18353L5.85236 8.86133C6.54265 8.60897 7.16954 8.20896 7.68925 7.68925C8.20896 7.16954 8.60897 6.54265 8.86133 5.85236L9.18353 4.97204Z' fill='${encodedColor}'/%3E%3C/svg%3E%0A")`);
+    }
+
+}
+
 function showAlertPopup(message, severity) {
     var alertElement = document.createElement('div');
     alertElement.className = 'fw-wallet-alert-popup';
@@ -92,7 +119,7 @@ function showAlertPopup(message, severity) {
     }, 3000);
 }
 
-window.onload = async function loggedIn() {
+window.onload = async function loggedIn(fetchThemeDetails = true) {
     showLoadingScreen(true);
     const mainScript = document.querySelector('#fc-wallet-19212');
     const customer_id = mainScript.getAttribute('data-customer-id');
@@ -100,7 +127,11 @@ window.onload = async function loggedIn() {
     const client_id = mainScript.getAttribute('data-client-id');
 
     if (customer_id && customer_tags) {
-        const response = await fetch(`${process.env.WALLET_API_URI}/mock-walletlogs`, {
+        if (fetchThemeDetails) {
+            await setTheme({ client_id });
+        }
+
+        const response = await fetch(`${process.env.WALLET_API_URI}/user-walletlogs`, {
             "method": "POST",
             "headers": {
                 "Content-Type": "application/json"
@@ -112,7 +143,7 @@ window.onload = async function loggedIn() {
             })
         });
         const walletData = await response.json()
-        let walletAmount = walletData?.data?.data?.wallet?.amount;
+        let walletAmount = walletData?.data?.data?.wallet?.wallet?.amount;
 
         const couponDataRes = await fetch(`${process.env.WALLET_API_URI}/get-featured-coupons`, {
             "method": "POST",
@@ -168,7 +199,7 @@ window.onload = async function loggedIn() {
             shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .fw_points__overlay .cardWrapper.points').addEventListener('click', function () {
 
                 let walletPointsActivityHTML = '';
-                walletData?.data?.data?.wallet?.logs?.edges?.forEach((edge) => {
+                walletData?.data?.data?.wallet?.wallet?.logs?.edges?.forEach((edge) => {
                     let symbol, color;
                     if (edge.node.type === "ADD") {
                         symbol = '+';
@@ -184,7 +215,7 @@ window.onload = async function loggedIn() {
                             <div class="pointsRow">
                             <div class="pointsRow_reason">
                             <p class="pointsRow_reason_title" >${edge.node.reason}</p>
-                            <p style="color:${color};font-weight:600">${symbol}${edge.node.amount} points</p>
+                            <p style="color:${color};font-weight:600;text-align: right;">${symbol}${edge.node.amount} points</p>
                             </div>
                             
                             <p class="">${new Date(edge.node.created)?.toISOString()?.split('T')?.[0]}</p>
@@ -200,7 +231,7 @@ window.onload = async function loggedIn() {
                 shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .fw_points__overlay').innerHTML = overLayScreenPointsActivity;
 
                 shadowRoot.querySelector('.fw_points__overlay .full_height_overlay_modal .go-back-header .go-back-header-heading').addEventListener('click', function () {
-                    loggedIn()
+                    loggedIn(false);
                 });
             });
 
@@ -278,7 +309,7 @@ window.onload = async function loggedIn() {
                                 }, 1500)
                             })
 
-                            const response = await fetch(`${process.env.WALLET_API_URI}/mock-walletlogs`, {
+                            const response = await fetch(`${process.env.WALLET_API_URI}/user-walletlogs`, {
                                 "method": "POST",
                                 "headers": {
                                     "Content-Type": "application/json"
@@ -290,7 +321,7 @@ window.onload = async function loggedIn() {
                                 })
                             });
                             const walletData = await response.json()
-                            walletAmount = walletData?.data?.data?.wallet?.amount;
+                            walletAmount = walletData?.data?.data?.wallet?.wallet?.amount;
                             if (shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .fw_points__overlay .cardWrapper.points .pointsBox .walletAmount')) {
                                 shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .fw_points__overlay .cardWrapper.points .pointsBox .walletAmount').innerHTML = walletAmount;
                             } else if (shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .fw_points__overlay .top-head-points .points-wrapper')) {
@@ -417,7 +448,7 @@ window.onload = async function loggedIn() {
                                 }, 1500)
                             })
 
-                            const response = await fetch(`${process.env.WALLET_API_URI}/mock-walletlogs`, {
+                            const response = await fetch(`${process.env.WALLET_API_URI}/user-walletlogs`, {
                                 "method": "POST",
                                 "headers": {
                                     "Content-Type": "application/json"
@@ -429,7 +460,7 @@ window.onload = async function loggedIn() {
                                 })
                             });
                             const walletData = await response.json()
-                            walletAmount = walletData?.data?.data?.wallet?.amount;
+                            walletAmount = walletData?.data?.data?.wallet?.wallet?.amount;
                             if (shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .fw_points__overlay .cardWrapper.points .pointsBox .walletAmount')) {
                                 shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .fw_points__overlay .cardWrapper.points .pointsBox .walletAmount').innerHTML = walletAmount;
                             } else if (shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .fw_points__overlay .top-head-points .points-wrapper')) {
@@ -532,7 +563,7 @@ window.onload = async function loggedIn() {
                         showViewAllCouponsScreen();
                     })
                     shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .full_height_overlay_modal .go-back-header .close').addEventListener('click', () => {
-                        loggedIn();
+                        loggedIn(false);
                     })
 
 
@@ -614,7 +645,7 @@ window.onload = async function loggedIn() {
                 })
 
                 shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .full_height_overlay_modal .go-back-header .close').addEventListener('click', () => {
-                    loggedIn();
+                    loggedIn(false);
                 })
             })
         })();
@@ -730,7 +761,7 @@ window.onload = async function loggedIn() {
                                     shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .fw_points__overlay .playArea .spinned-win-modal-container .spin-win-close button').addEventListener('click', () => {
                                         showSpinWheels();
                                     })
-                                    const response = await fetch(`${process.env.WALLET_API_URI}/mock-walletlogs`, {
+                                    const response = await fetch(`${process.env.WALLET_API_URI}/user-walletlogs`, {
                                         "method": "POST",
                                         "headers": {
                                             "Content-Type": "application/json"
@@ -742,7 +773,7 @@ window.onload = async function loggedIn() {
                                         })
                                     });
                                     const walletData = await response.json()
-                                    walletAmount = walletData?.data?.data?.wallet?.amount;
+                                    walletAmount = walletData?.data?.data?.wallet?.wallet?.amount;
                                     if (shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .fw_points__overlay .top-head-points .points-wrapper')) {
                                         shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .fw_points__overlay .top-head-points .points-wrapper').innerHTML = walletAmount;
                                     }
@@ -846,7 +877,7 @@ window.onload = async function loggedIn() {
                         showSpinWheels();
                     })
                     shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .full_height_overlay_modal .go-back-header .close').addEventListener('click', () => {
-                        loggedIn();
+                        loggedIn(false);
                     })
 
 
@@ -929,7 +960,7 @@ window.onload = async function loggedIn() {
 
 
                 shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .full_height_overlay_modal .go-back-header .close').addEventListener('click', () => {
-                    loggedIn();
+                    loggedIn(false);
                 })
             })
         })();
@@ -1200,7 +1231,7 @@ window.onload = async function loggedIn() {
                                         shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .fw_points__overlay .playArea .scratched-win-modal-container .scratch-win-close button').addEventListener('click', () => {
                                             showScratchCards();
                                         })
-                                        const response = await fetch(`${process.env.WALLET_API_URI}/mock-walletlogs`, {
+                                        const response = await fetch(`${process.env.WALLET_API_URI}/user-walletlogs`, {
                                             "method": "POST",
                                             "headers": {
                                                 "Content-Type": "application/json"
@@ -1212,7 +1243,7 @@ window.onload = async function loggedIn() {
                                             })
                                         });
                                         const walletData = await response.json()
-                                        walletAmount = walletData?.data?.data?.wallet?.amount;
+                                        walletAmount = walletData?.data?.data?.wallet?.wallet?.amount;
                                         if (shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .fw_points__overlay .top-head-points .points-wrapper')) {
                                             shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .fw_points__overlay .top-head-points .points-wrapper').innerHTML = walletAmount;
                                         }
@@ -1319,7 +1350,7 @@ window.onload = async function loggedIn() {
                         showScratchCards();
                     })
                     shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .full_height_overlay_modal .go-back-header .close').addEventListener('click', () => {
-                        loggedIn();
+                        loggedIn(false);
                     })
 
 
@@ -1402,7 +1433,7 @@ window.onload = async function loggedIn() {
 
 
                 shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .full_height_overlay_modal .go-back-header .close').addEventListener('click', () => {
-                    loggedIn();
+                    loggedIn(false);
                 })
             })
         })();
@@ -1523,7 +1554,7 @@ window.onload = async function loggedIn() {
                         showLottoQuiz();
                     })
                     shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .full_height_overlay_modal .go-back-header .close').addEventListener('click', () => {
-                        loggedIn();
+                        loggedIn(false);
                     })
 
 
@@ -1606,7 +1637,7 @@ window.onload = async function loggedIn() {
 
 
                 shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .full_height_overlay_modal .go-back-header .close').addEventListener('click', () => {
-                    loggedIn();
+                    loggedIn(false);
                 })
             })
         })();
@@ -1679,6 +1710,9 @@ window.onload = async function loggedIn() {
             });
         })();
     } else if (client_id) {
+        if (fetchThemeDetails) {
+            await setTheme({ client_id });
+        }
 
         const couponDataRes = await fetch(`${process.env.WALLET_API_URI}/get-featured-coupons`, {
             "method": "POST",
