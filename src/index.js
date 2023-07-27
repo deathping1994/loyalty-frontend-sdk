@@ -266,7 +266,7 @@ window.onload = async function loggedIn(fetchThemeDetails = true) {
                         shadowRoot.querySelector('.fw_points__overlay.show_overlay').style.overflowY = "hidden";
 
                     })();
-
+                
                     shadowRoot.querySelector('.fw_points__overlay .overlay_modal .content .unlock-coupon-card .unlock-button').addEventListener('click', async function () {
                         showLoadingScreen(true);
                         const response = await fetch(`${process.env.WALLET_API_URI}/get-code`, {
@@ -351,7 +351,7 @@ window.onload = async function loggedIn(fetchThemeDetails = true) {
         redeemCodeOnClick();
 
         (function viewAllCoupons() {
-            shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .fw_points__overlay .couponCodes .viewAllCoupons').addEventListener('click', function showViewAllCouponsScreen() {
+            shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .fw_points__overlay .couponCodes .viewAllCoupons').addEventListener('click', async function showViewAllCouponsScreen() {
                 let couponCardHTML = '';
                 couponData.forEach((couponItem, index) => {
                     couponCardHTML += `
@@ -484,6 +484,164 @@ window.onload = async function loggedIn(fetchThemeDetails = true) {
 
                     });
                 })
+
+                showLoadingScreen(true);
+                const couponToExploreRes = await fetch(`${process.env.WALLET_API_URI}/get-coupons-to-explore`, {
+                    "method": "POST",
+                    "headers": {
+                        "Content-Type": "application/json"
+                    },
+                    "body": JSON.stringify({
+                        "customer_id": customer_id,
+                        "user_hash": customer_tags,
+                        "client_id": client_id
+                    })
+                });
+
+                const couponToExploreResponse = await couponToExploreRes.json();
+                const couponToExploreData = couponToExploreResponse?.data?.data;
+                showLoadingScreen(false);
+
+
+                if (couponToExploreResponse?.data?.enable && couponToExploreData) {
+                    const couponToExploreHeadingHTMLContainer = document.createElement("div");
+                    const couponToExploreHeadingHTML = `
+                    <div class="cardContainer">
+                        <div class="rowHead">
+                            <p>Coupons to Explore</p>
+                        </div>
+                    </div>
+                    `;
+                    couponToExploreHeadingHTMLContainer.innerHTML = couponToExploreHeadingHTML;
+                    shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .fw_points__overlay .couponsScreenContainer .redeemCoins').appendChild(couponToExploreHeadingHTMLContainer);
+
+                    let couponToExploreHTML = '';
+                    couponToExploreData.forEach((couponItem, index) => {
+                        couponToExploreHTML += `
+                        <div data-coupon-idx="${index}" class="cardContainer cardRow">
+                            <div data-coupon-idx="${index}" class="redeemCoinsCard">
+                                <div data-coupon-idx="${index}" class="redeemCoinsImg"><img data-coupon-idx="${index}" src="${couponItem?.image}" />
+                                </div>
+                                <div data-coupon-idx="${index}" class="redeemCoinsText">
+                                    <h5 data-coupon-idx="${index}">${couponItem?.heading}</h5>
+                                    <p data-coupon-idx="${index}">Unlock for <span data-coupon-idx="${index}" class="coins-icon"></span> ${couponItem?.amount}</p>
+                                </div>
+                            </div>
+                        </div>
+                    `});
+
+                    const couponToExploreHTMLContainer = document.createElement('div');
+                    couponToExploreHTMLContainer.innerHTML = couponToExploreHTML;
+                    shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .fw_points__overlay .couponsScreenContainer .redeemCoins').appendChild(couponToExploreHTMLContainer);
+
+
+
+                    shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .fw_points__overlay .couponsScreenContainer .redeemCoins .cardContainer.cardRow .redeemCoinsCard').addEventListener('click', (event) => {
+                        const couponToExpIndex = event.target.getAttribute("data-coupon-idx");
+                        const selectedcouponToExpData = couponToExpIndex && couponToExploreData[couponToExpIndex];
+                        const couponAmount = selectedcouponToExpData?.amount;
+                        const couponTitle = selectedcouponToExpData?.title;
+                        const couponHeading = selectedcouponToExpData?.heading;
+
+                        let overLayScreenUnlockCode = injectVariablesToHTML(overlaymodal, ".content", unlockcodescreen)
+                        overLayScreenUnlockCode = injectVariablesToHTML(overLayScreenUnlockCode, ".unlock-heading .heading-text", couponHeading)
+                        overLayScreenUnlockCode = injectVariablesToHTML(overLayScreenUnlockCode, ".unlock-title", couponTitle)
+                        overLayScreenUnlockCode = injectVariablesToHTML(overLayScreenUnlockCode, ".unlock-text", `Unlock for ${couponAmount} OB Coins`)
+
+                        const overlay = shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .fw_points__overlay .overlay_modal');
+
+                        overlay.innerHTML = overLayScreenUnlockCode;
+
+                        (function openOverlay() {
+                            overlay.style.height = "60%";
+                            const scrolled = shadowRoot.querySelector('.fw_points__overlay.show_overlay').scrollTop;
+                            overlay.style.bottom = `-${scrolled}px`;
+                            const backDrop = document.createElement('div');
+                            backDrop.innerHTML = `<div class="overlay_modal_backdrop"></div>`;
+                            shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .fw_points__overlay').appendChild(backDrop);
+                            shadowRoot.querySelector('.fw_points__overlay.show_overlay').style.overflowY = "hidden";
+
+                        })();
+
+                        shadowRoot.querySelector('.fw_points__overlay .overlay_modal .content .unlock-coupon-card .unlock-button').addEventListener('click', async function () {
+                            showLoadingScreen(true);
+                            const response = await fetch(`${process.env.WALLET_API_URI}/get-code`, {
+                                "method": "POST",
+                                "headers": {
+                                    "Content-Type": "application/json"
+                                },
+                                "body": JSON.stringify({
+                                    "customer_id": customer_id,
+                                    "user_hash": customer_tags,
+                                    "couponAmount": couponAmount,
+                                    "client_id": client_id,
+                                    "coupon_title": couponTitle
+                                })
+                            });
+                            const couponData = await response.json();
+                            if (couponData?.status !== "success") {
+                                if (couponData?.error?.includes("insufficient")) {
+                                    showAlertPopup("insufficient funds", "error");
+                                } else {
+                                    showAlertPopup("something went wrong", "error");
+                                }
+                                showLoadingScreen(false);
+                            } else {
+                                shadowRoot.querySelector('.fw_points__overlay .overlay_modal .content .unlock-coupon-card .unlock-button-container').innerHTML = `
+                        <p class="unlock-text">Use this code at checkout</p>
+                        <div class="revealed-code"><p>${couponData?.data?.coupon_code}</p><img src="https://media.farziengineer.co/farziwallet/copy-icon.png"/><p class="copied-alert">copied</p></div>
+                        `;
+                                showLoadingScreen(false);
+                                shadowRoot.querySelector('.fw_points__overlay .overlay_modal .content .unlock-coupon-card .revealed-code img').addEventListener('click', () => {
+                                    navigator.clipboard.writeText(couponData?.data?.coupon_code);
+                                    const copiedBtn = shadowRoot.querySelector('.fw_points__overlay .overlay_modal .content .unlock-coupon-card .revealed-code .copied-alert');
+
+                                    copiedBtn.style.display = "block";
+                                    copiedBtn.style.padding = "12px 16px";
+
+                                    setTimeout(() => {
+                                        copiedBtn.style.padding = "1px 1px";
+                                        copiedBtn.style.display = "none";
+                                    }, 1500)
+                                })
+
+                                const response = await fetch(`${process.env.WALLET_API_URI}/user-walletlogs`, {
+                                    "method": "POST",
+                                    "headers": {
+                                        "Content-Type": "application/json"
+                                    },
+                                    "body": JSON.stringify({
+                                        customer_id: customer_id,
+                                        user_hash: customer_tags,
+                                        client_id: client_id
+                                    })
+                                });
+                                const walletData = await response.json()
+                                walletAmount = walletData?.data?.data?.wallet?.wallet?.amount;
+                                if (shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .fw_points__overlay .cardWrapper.points .pointsBox .walletAmount')) {
+                                    shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .fw_points__overlay .cardWrapper.points .pointsBox .walletAmount').innerHTML = walletAmount;
+                                } else if (shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .fw_points__overlay .top-head-points .points-wrapper')) {
+                                    shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .fw_points__overlay .top-head-points .points-wrapper').innerHTML = walletAmount;
+                                }
+                            }
+
+                        });
+
+                        shadowRoot.querySelector('.fw_points__overlay .overlay_modal .go-back-header .go-back-header-heading').addEventListener('click', function () {
+
+                            (function closeOverlay() {
+                                overlay.style.height = "0%";
+                                overlay.style.bottom = "-120%";
+                                const backDrop = shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .fw_points__overlay .overlay_modal_backdrop');
+                                backDrop.parentNode.removeChild(backDrop);
+                                overlay.innerHTML = '';
+                                shadowRoot.querySelector('.fw_points__overlay.show_overlay').style.overflowY = "scroll";
+
+                            })();
+
+                        });
+                    })
+                }
 
                 const availableCouponsTab = shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .full_height_overlay_modal .couponsScreenContainer .top-head-tabs #available-coupons-screen');
 

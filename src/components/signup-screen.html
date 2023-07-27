@@ -87,57 +87,43 @@
         color: grey;
     }
 
-    .loading-screen .ip {
-        width: 120;
-        height: 60;
+    .loading-screen .spinner {
+        animation: rotate 1.4s linear infinite;
+        -webkit-animation: rotate 1.4s linear infinite;
+        -moz-animation: rotate 1.4s linear infinite;
+        width: 80px;
+        height: 80px;
+        position: relative;
     }
 
-    .loading-screen .ip__track {
-        stroke: hsl(223, 90%, 90%);
-        transition: stroke 0.3s;
+    .loading-screen .spinner-dot {
+        width: 92px;
+        height: 92px;
+        position: relative;
+        top: 0;
     }
 
-    .loading-screen .ip__worm1,
-    .loading-screen .ip__worm2 {
-        animation: worm1 2s linear infinite;
+    .loading-screen .path {
+        stroke-dasharray: 170;
+        stroke-dashoffset: 20;
     }
 
-    .loading-screen .ip__worm2 {
-        animation-name: worm2;
-    }
-
-    /* Animation */
-    @keyframes worm1 {
-        from {
-            stroke-dashoffset: 0;
-        }
-
-        50% {
-            animation-timing-function: steps(1);
-            stroke-dashoffset: -358;
-        }
-
-        50.01% {
-            animation-timing-function: linear;
-            stroke-dashoffset: 358;
-        }
-
+    /* Loader Animation */
+    @keyframes rotate {
         to {
-            stroke-dashoffset: 0;
+            transform: rotate(360deg);
         }
     }
 
-    @keyframes worm2 {
-        from {
-            stroke-dashoffset: 358;
-        }
-
-        50% {
-            stroke-dashoffset: 0;
-        }
-
+    @-webkit-keyframes rotate {
         to {
-            stroke-dashoffset: -358;
+            -webkit-transform: rotate(360deg);
+        }
+    }
+
+    @-moz-keyframes rotate {
+        to {
+            transform: rotate(360deg);
         }
     }
 
@@ -1024,6 +1010,7 @@
         width: 100%;
         padding: 16px;
         align-items: center;
+        cursor: pointer;
     }
 
     .fw_points__overlay .couponsScreenContainer .redeemCoins .redeemCoinsCard .redeemCoinsImg {
