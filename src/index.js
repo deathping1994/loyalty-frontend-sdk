@@ -62,6 +62,18 @@ document.body.appendChild(container);
     closeBtn?.addEventListener('click', closeWidgetPopup);
 })();
 
+(function storeReferHash() {
+    const urlSearchParams = new URLSearchParams(window.location.search);
+    const referHash = urlSearchParams.get("fc_refer_hash");
+    if (referHash) {
+        try {
+            localStorage.setItem("fc_refer_hash", referHash);
+        } catch (error) {
+            console.log("error in storeReferHash", error);
+        }
+    }
+})();
+
 function showLoadingScreen(showLoader) {
     if (showLoader) {
         const loadingBackDrop = document.createElement('div');
@@ -119,6 +131,30 @@ function showAlertPopup(message, severity) {
     }, 3000);
 }
 
+async function redeemReferHash({ customer_id, customer_tags, client_id }) {
+    const fc_refer_hash = localStorage.getItem("fc_refer_hash");
+    const redeemed = localStorage.getItem("fc_refer_hash_redeemed")
+    if (fc_refer_hash && !redeemed) {
+        try {
+            const response = await fetch(`${process.env.WALLET_API_URI}/redeem-referral-code`, {
+                "method": "POST",
+                "headers": {
+                    "Content-Type": "application/json"
+                },
+                "body": JSON.stringify({
+                    customer_id: customer_id,
+                    user_hash: customer_tags,
+                    client_id: client_id,
+                    refer_hash: fc_refer_hash
+                })
+            });
+            localStorage.setItem("fc_refer_hash_redeemed", true)
+        } catch (err) {
+            console.log("error in redeemReferHash", err)
+        }
+    }
+}
+
 window.onload = async function loggedIn(fetchThemeDetails = true) {
     showLoadingScreen(true);
     const mainScript = document.querySelector('#fc-wallet-19212');
@@ -126,10 +162,12 @@ window.onload = async function loggedIn(fetchThemeDetails = true) {
     const customer_tags = mainScript.getAttribute('data-customer-tag')?.trim();
     const client_id = mainScript.getAttribute('data-client-id');
 
-    if (customer_id && customer_tags) {
+    if (customer_id) {
         if (fetchThemeDetails) {
             await setTheme({ client_id });
         }
+
+        await redeemReferHash({ customer_id, customer_tags, client_id });
 
         const response = await fetch(`${process.env.WALLET_API_URI}/user-walletlogs`, {
             "method": "POST",
@@ -266,7 +304,7 @@ window.onload = async function loggedIn(fetchThemeDetails = true) {
                         shadowRoot.querySelector('.fw_points__overlay.show_overlay').style.overflowY = "hidden";
 
                     })();
-                
+
                     shadowRoot.querySelector('.fw_points__overlay .overlay_modal .content .unlock-coupon-card .unlock-button').addEventListener('click', async function () {
                         showLoadingScreen(true);
                         const response = await fetch(`${process.env.WALLET_API_URI}/get-code`, {
@@ -1810,7 +1848,7 @@ window.onload = async function loggedIn(fetchThemeDetails = true) {
                 overlay.innerHTML = overLayScreenUnlockCode;
 
                 (function openOverlay() {
-                    overlay.style.height = "82%";
+                    overlay.style.height = "84%";
                     const scrolled = shadowRoot.querySelector('.fw_points__overlay.show_overlay').scrollTop;
                     overlay.style.bottom = `-${scrolled}px`;
                     const backDrop = document.createElement('div');
@@ -1834,14 +1872,48 @@ window.onload = async function loggedIn(fetchThemeDetails = true) {
                     })
                 });
                 const referralCodeData = await referralCodeRes.json();
-                const referralCode = referralCodeData?.data?.referral_code;
+                //const referralCode = referralCodeData?.data?.referral_code;
+                const referralLink = `${window.location.origin}${referralCodeData?.data?.path}`
 
-                shadowRoot.querySelector('.fw_points__overlay .overlay_modal .invite-and-earn-popup .revealed-code p').innerHTML = referralCode;
+                shadowRoot.querySelector('.fw_points__overlay .overlay_modal .invite-and-earn-popup .revealed-code p').innerHTML = referralLink;
+
+                const socialContainerHTML = `
+                <a
+                    href="sms://18005555555/?body=Click on the referral link below and get rewarded with 100 OB Coins. ${referralLink}"
+                    target="_blank">
+                    <div class="socials-refer-icon">
+                        <img src="https://media.farziengineer.co/farziwallet/sms.png" />
+                    </div>
+                </a>
+        
+                <a
+                    href="https://www.facebook.com/sharer/sharer.php/?u=${encodeURI(referralLink)}" target="_blank">
+                    <div class="socials-refer-icon">
+                        <img src="https://media.farziengineer.co/farziwallet/facebook-icon.png" />
+                    </div>
+                </a>
+        
+                <a
+                    href="https://api.whatsapp.com/send?text=Click on the referral link below and get rewarded with 100 OB Coins. ${referralLink}" target="_blank">
+                    <div class="socials-refer-icon">
+                        <img src="https://media.farziengineer.co/farziwallet/whatsapp-icon.png" />
+                    </div>
+                </a>
+        
+                <a
+                    href="sms://18005555555/?body=Click on the referral link below and get rewarded with 100 OB Coins. ${referralLink}" target="_blank">
+                    <div class="socials-refer-icon">
+                        <img src="https://media.farziengineer.co/farziwallet/share-icon.png" />
+                    </div>
+                </a>
+                `
+
+                shadowRoot.querySelector('.fw_points__overlay .overlay_modal .invite-and-earn-popup .invite-and-earn-socials-container').innerHTML = socialContainerHTML;
 
                 showLoadingScreen(false);
 
                 shadowRoot.querySelector('.fw_points__overlay .overlay_modal .content .unlock-coupon-card .revealed-code img').addEventListener('click', () => {
-                    navigator.clipboard.writeText(referralCode);
+                    navigator.clipboard.writeText(referralLink);
                     const copiedBtn = shadowRoot.querySelector('.fw_points__overlay .overlay_modal .content .unlock-coupon-card.invite-and-earn-popup .revealed-code .copied-alert');
 
                     copiedBtn.style.display = "block";
