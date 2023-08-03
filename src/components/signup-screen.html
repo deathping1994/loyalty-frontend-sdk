@@ -848,8 +848,10 @@
         margin: 0;
         width: 95%;
         padding: 0% 5%;
-        word-break: break-all;
         font-size: 14px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
 
     .fw_points__overlay .overlay_modal .unlock-coupon-card .revealed-code .copied-alert {
@@ -932,8 +934,9 @@
 
     .fw_points__overlay .full_height_overlay_modal .couponsScreenContainer .tabHead {
         display: flex;
-        justify-content: space-between;
+        justify-content: flex-start;
         align-items: center;
+        gap: 30px;
     }
 
     .fw_points__overlay .full_height_overlay_modal .couponsScreenContainer .tabHead>div {
@@ -1298,13 +1301,36 @@
     }
 
     .fw_points__overlay .invite-and-earn-popup .invite-and-earn-socials-container .socials-refer-icon {
-        width: 60px;
-        height: 60px;
+        width: 40px;
+        height: 40px;
         background-color: #FFAAAA;
         border-radius: 50%;
         display: flex;
         justify-content: center;
         align-items: center;
+    }
+
+    .fw_points__overlay .invite-and-earn-popup .invite-and-earn-socials-container .socials-refer-icon-whatsapp {
+        height: 40px;
+        width: 96%;
+        background-color: #faa;
+        border-radius: 4px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .fw_points__overlay .invite-and-earn-popup .invite-and-earn-socials-container .socials-refer-icon-whatsapp-link {
+        display: block;
+        width: 100%;
+        text-decoration: none;
+        font-weight: 500;
+        font-size: 14px;
+        color: #000;
+    }
+
+    .fw_points__overlay .invite-and-earn-popup .invite-and-earn-socials-container .socials-refer-icon-whatsapp-link p {
+        margin-left: 10px;
     }
 
     .fw_points__overlay .invite-and-earn-popup .invite-and-earn-socials-container .socials-refer-icon img {

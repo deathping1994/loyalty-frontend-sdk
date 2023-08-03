@@ -1848,7 +1848,7 @@ window.onload = async function loggedIn(fetchThemeDetails = true) {
                 overlay.innerHTML = overLayScreenUnlockCode;
 
                 (function openOverlay() {
-                    overlay.style.height = "84%";
+                    overlay.style.height = "80%";
                     const scrolled = shadowRoot.querySelector('.fw_points__overlay.show_overlay').scrollTop;
                     overlay.style.bottom = `-${scrolled}px`;
                     const backDrop = document.createElement('div');
@@ -1872,36 +1872,20 @@ window.onload = async function loggedIn(fetchThemeDetails = true) {
                     })
                 });
                 const referralCodeData = await referralCodeRes.json();
-                //const referralCode = referralCodeData?.data?.referral_code;
                 const referralLink = `${window.location.origin}${referralCodeData?.data?.path}`
 
                 shadowRoot.querySelector('.fw_points__overlay .overlay_modal .invite-and-earn-popup .revealed-code p').innerHTML = referralLink;
 
                 const socialContainerHTML = `
-                <a
-                    href="sms://18005555555/?body=Click on the referral link below and get rewarded with 100 OB Coins. ${referralLink}"
-                    target="_blank">
-                    <div class="socials-refer-icon">
-                        <img src="https://media.farziengineer.co/farziwallet/sms.png" />
-                    </div>
-                </a>
-        
-                <a
-                    href="https://www.facebook.com/sharer/sharer.php/?u=${encodeURI(referralLink)}" target="_blank">
-                    <div class="socials-refer-icon">
-                        <img src="https://media.farziengineer.co/farziwallet/facebook-icon.png" />
-                    </div>
-                </a>
-        
-                <a
-                    href="https://api.whatsapp.com/send?text=Click on the referral link below and get rewarded with 100 OB Coins. ${referralLink}" target="_blank">
-                    <div class="socials-refer-icon">
+                <a class="socials-refer-icon-whatsapp-link"
+                href="https://api.whatsapp.com/send?text=Click on the referral link below and get rewarded with 100 OB Coins. ${referralLink}" target="_blank">
+                    <div class="socials-refer-icon-whatsapp">
                         <img src="https://media.farziengineer.co/farziwallet/whatsapp-icon.png" />
+                        <p>Send on whatsapp</p>
                     </div>
                 </a>
-        
                 <a
-                    href="sms://18005555555/?body=Click on the referral link below and get rewarded with 100 OB Coins. ${referralLink}" target="_blank">
+                href="sms://18005555555/?body=Click on the referral link below and get rewarded with 100 OB Coins. ${referralLink}" target="_blank">
                     <div class="socials-refer-icon">
                         <img src="https://media.farziengineer.co/farziwallet/share-icon.png" />
                     </div>
