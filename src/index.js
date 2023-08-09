@@ -23,6 +23,16 @@ import customdiscountcodescreen from "./components/custom-discount-code-screen.h
     document.head.appendChild(link);
 })();
 
+(function loadGlobalStyles() {
+    const styles = document.createElement('style');
+    styles.innerHTML = `
+        .fc-no-scroll {
+            overflow: hidden;
+        }
+    `;
+    document.body.appendChild(styles);
+})();
+
 
 // Load the HTML content into the shadow DOM
 const container = document.createElement('div');
@@ -41,20 +51,25 @@ document.body.appendChild(container);
     var cardContainer = shadowRoot.getElementById('card-container');
     var headerClose = shadowRoot.getElementById('header-close');
     var closeBtn = shadowRoot.querySelector('.fw_points__overlay.show_overlay .header .header-close');
+    const body = document.querySelector('body');
 
     widgetButton.addEventListener('click', function () {
         if (cardContainer.style.display === 'none') {
             cardContainer.style.display = 'block';
+            body.classList.add("fc-no-scroll");
         } else {
             cardContainer.style.display = 'none';
+            body.classList.remove("fc-no-scroll");
         }
     });
 
     function closeWidgetPopup() {
         if (cardContainer.style.display === 'none') {
             cardContainer.style.display = 'block';
+            body.classList.add("fc-no-scroll");
         } else {
             cardContainer.style.display = 'none';
+            body.classList.remove("fc-no-scroll");
         }
     }
 
@@ -226,8 +241,10 @@ window.onload = async function loggedIn(fetchThemeDetails = true) {
 
             if (cardContainer.style.display === 'none') {
                 cardContainer.style.display = 'block';
+                document.body.classList.add("fc-no-scroll");
             } else {
                 cardContainer.style.display = 'none';
+                document.body.classList.remove("fc-no-scroll");
             }
         })
 
@@ -1470,6 +1487,9 @@ window.onload = async function loggedIn(fetchThemeDetails = true) {
                             shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .fw_points__overlay .playArea .unlock-card-text').innerHTML = "Click and drag your cursor across the card";
 
                             shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .fw_points__overlay .playArea .unlock-scratch-card-btn').style.display = "none";
+
+                            document.body.scrollTop = 0; // For Safari
+                            document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
                         })
 
                         shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .full_height_overlay_modal .go-back-header .close').addEventListener('click', () => {
@@ -1993,8 +2013,10 @@ window.onload = async function loggedIn(fetchThemeDetails = true) {
 
             if (cardContainer.style.display === 'none') {
                 cardContainer.style.display = 'block';
+                document.body.classList.add("fc-no-scroll");
             } else {
                 cardContainer.style.display = 'none';
+                document.body.classList.remove("fc-no-scroll");
             }
         })
 
