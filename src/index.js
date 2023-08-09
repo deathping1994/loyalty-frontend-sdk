@@ -944,9 +944,13 @@ window.onload = async function loggedIn(fetchThemeDetails = true) {
                             const unlockedWheel = shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .fw_points__overlay .playArea #fw-chart-spin-wheel svg')
                             unlockedWheel.parentNode.removeChild(unlockedWheel);
 
-                            drawWheel(shadowRoot, Array.from({ length: 6 }, () => ({ label: spinData?.data?.win_message, value: 5 })), true, () => {
+                            drawWheel(shadowRoot, Array.from({ length: 6 }, () => ({ label: spinData?.data?.win_coupon || spinData?.data?.win_message, value: 5 })), true, () => {
                                 setTimeout(async function showSpinWheelWinningPopup() {
                                     shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .fw_points__overlay .playArea .spinned-win-modal-container .spin-win-message').innerHTML = spinData?.data?.win_message;
+
+                                    if (spinData?.data?.win_coupon) {
+                                        shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .fw_points__overlay .playArea .spinned-win-modal-container .spin-win-coupon p').innerHTML = `Coupon Code: ${spinData?.data?.win_coupon}`;
+                                    }
 
                                     shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .fw_points__overlay .playArea .spinned-win-modal-container').style.height = "100%";
 
@@ -1282,6 +1286,11 @@ window.onload = async function loggedIn(fetchThemeDetails = true) {
 
                             shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .fw_points__overlay .playArea #fw-chart-scratch-card .scratch-card-base h4').innerHTML = scratchCardData?.data?.win_message;
 
+
+                            if (scratchCardData?.data?.win_coupon) {
+                                shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .fw_points__overlay .playArea #fw-chart-scratch-card .scratch-card-base p').innerHTML = `Coupon Code: ${scratchCardData?.data?.win_coupon}`;
+                            }
+
                             showLoadingScreen(false);
 
                             (function drawUnlockedScratchCard() {
@@ -1417,6 +1426,10 @@ window.onload = async function loggedIn(fetchThemeDetails = true) {
                                         cardScratchable = false;
 
                                         shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .fw_points__overlay .playArea .scratched-win-modal-container .scratch-win-message').innerHTML = scratchCardData?.data?.win_message;
+
+                                        if (scratchCardData?.data?.win_coupon) {
+                                            shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .fw_points__overlay .playArea .scratched-win-modal-container .scratch-win-coupon p').innerHTML = `Coupon Code: ${scratchCardData?.data?.win_coupon}`;
+                                        }
 
                                         shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .fw_points__overlay .playArea .scratched-win-modal-container').style.height = "100%";
 

@@ -1,6 +1,5 @@
 <div class="go-back-header">
-    <h4 class="go-back-header-heading"><img class="close"
-            src="https://media.farziengineer.co/farziwallet/cross.png"
+    <h4 class="go-back-header-heading"><img class="close" src="https://media.farziengineer.co/farziwallet/cross.png"
             alt="close header" width="30px"></h4>
 </div>
 <div class="content">
@@ -16,11 +15,11 @@
         </div>
 
         <div id="fw-chart-scratch-card" class="locked-card">
-            <img class="locked-scratch"
-                src="https://media.farziengineer.co/farziwallet/lock.png" />
+            <img class="locked-scratch" src="https://media.farziengineer.co/farziwallet/lock.png" />
             <div class="scratch-card-container">
                 <div class="scratch-card-base">
                     <h4>10 OB Coins</h4>
+                    <p></p>
                 </div>
                 <canvas id="scratch-card-element" width="300" height="300"></canvas>
             </div>
@@ -39,6 +38,9 @@
                 <h3>Congratulations!</h3>
                 <p>You won</p>
                 <h3 class="scratch-win-message">50 OB Coins</h3>
+                <div class="scratch-win-coupon">
+                    <p></p>
+                </div>
                 <div class="scratch-win-play-again"><button>Play Again</button></div>
                 <div class="scratch-win-close"><button>close</button></div>
             </div>
@@ -125,6 +127,7 @@
                 padding: 30px 25px;
                 box-shadow: 0px -4px 24px rgba(0, 0, 0, .12);
                 border-radius: 12px;
+                max-width: 90%;
 
             }
 
@@ -136,6 +139,11 @@
 
             .fw_points__overlay .scratched-win-modal-container .scratched-win-modal .scratch-win-message {
                 font-size: 20px;
+            }
+
+            .fw_points__overlay .scratched-win-modal-container .scratched-win-modal .scratch-win-coupon {
+                margin-bottom: 20px;
+                font-size: 15px;
             }
 
             .fw_points__overlay .scratched-win-modal-container .scratched-win-modal>div,
