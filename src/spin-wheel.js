@@ -82,7 +82,7 @@ export function drawWheel(shadowRoot, data, unlock, spinnedCallback) {
                             if (i === picked) {
                                 var style = document.createElement("style");
                                 style.innerHTML = `text[text-anchor="end"] {
-                                    transform: ${"rotate(" + (d.angle * 180 / Math.PI - 90) + "deg)translate(" + (d.outerRadius - 30) + "px,40px)" + "rotateZ(90deg)"};
+                                    transform: ${"rotate(" + (d.angle * 180 / Math.PI - 90) + "deg)translate(" + (d.outerRadius - 30) + "px,30px)" + "rotateZ(90deg)"};
                                 }`
                                 shadowRoot.querySelector("#fw-chart-spin-wheel").appendChild(style);
                             }
