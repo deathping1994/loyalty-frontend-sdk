@@ -1,4 +1,68 @@
-export function drawWheel(shadowRoot, data, unlock, spinnedCallback) {
+function splitStringOnLength(inputString, maxLength) {
+    if (typeof inputString !== 'string') {
+        return [];
+    }
+
+    const words = inputString.split(' ');
+    const result = [];
+    let currentSubstring = '';
+
+    for (const word of words) {
+        if (currentSubstring.length + word.length + 1 <= maxLength) {
+            // If adding the current word to the currentSubstring doesn't exceed maxLength
+            if (currentSubstring.length > 0) {
+                currentSubstring += ' ';
+            }
+            currentSubstring += word;
+        } else {
+            // If adding the current word would exceed maxLength, push the currentSubstring and start a new one
+            result.push(currentSubstring);
+            currentSubstring = word;
+        }
+    }
+
+    if (currentSubstring.length > 0) {
+        result.push(currentSubstring);
+    }
+
+    return result;
+}
+
+function wrap(text, width) {
+    text.each(function () {
+        var text = d3.select(this),
+            words = splitStringOnLength(text.text(), 12).reverse(),
+            word,
+            line = [],
+            lineNumber = 1,
+            lineHeight = 1.1, // ems
+            x = text.attr("x"),
+            y = text.attr("y"),
+            dy = 0, //parseFloat(text.attr("dy")),
+            tspan = text.text(null)
+                .append("tspan")
+                .attr("x", x)
+                .attr("y", y)
+                .attr("dy", -1 + "em");
+        while (word = words.pop()) {
+            line.push(word);
+            tspan.text(line.join(" "));
+            if (tspan.node().getComputedTextLength() > width) {
+                line.pop();
+                tspan.text(line.join(" "));
+                line = [word];
+                tspan = text.append("tspan")
+                    .attr("x", x)
+                    .attr("y", y)
+                    .attr("dy", "1" + "em")
+                    .attr("dx", "-" + ++lineNumber + dy + "em")
+                    .text(word);
+            }
+        }
+    });
+}
+
+export function drawWheel(shadowRoot, data, unlock, winningIdx, spinnedCallback) {
     (function auto() {
 
         const chartElement = shadowRoot.querySelector('#fw-chart-spin-wheel');
@@ -9,7 +73,7 @@ export function drawWheel(shadowRoot, data, unlock, spinnedCallback) {
             r = Math.min(w, h) / 2,
             rotation = 0,
             oldrotation = 0,
-            picked = 100000,
+            picked = winningIdx,
             oldpick = [],
             color = d3.scale.category20();
 
@@ -38,6 +102,18 @@ export function drawWheel(shadowRoot, data, unlock, spinnedCallback) {
             .attr("fill", function (d, i) { return color(i); })
             .attr("d", function (d) { return arc(d); });
 
+        // add the text
+        arcs.append("text").attr("transform", function (d) {
+            d.innerRadius = 0;
+            d.outerRadius = r;
+            d.angle = (d.startAngle + d.endAngle) / 2;
+            return "rotate(" + (d.angle * 180 / Math.PI - 90) + ")translate(" + (d.outerRadius - 10) + ")";
+        })
+            .attr("text-anchor", "end")
+            .text(function (d, i) {
+                return data[i].label;
+            }).call(wrap, 36);
+
         unlock && container.on("click", spin);
         function spin(d) {
 
@@ -49,8 +125,8 @@ export function drawWheel(shadowRoot, data, unlock, spinnedCallback) {
 
             rotation = (Math.round(rng / ps) * ps);
 
-            picked = Math.round(data.length - (rotation % 360) / ps);
-            picked = picked >= data.length ? (picked % data.length) : picked;
+            // picked = Math.round(data.length - (rotation % 360) / ps);
+            // picked = picked >= data.length ? (picked % data.length) : picked;
             if (oldpick.indexOf(picked) !== -1) {
                 d3.select(this).call(spin);
                 return;
@@ -66,32 +142,32 @@ export function drawWheel(shadowRoot, data, unlock, spinnedCallback) {
                     d3.select(".slice:nth-child(" + (picked + 1) + ") path")
                         .attr("fill", "#111");
 
-                    d3.select("#question h1")
-                        .text(data[picked].question);
+                    // d3.select("#question h1")
+                    //     .text(data[picked].question);
                     oldrotation = rotation;
 
                     // /* Get the result value from object "data" */
                     // console.log(data[picked].value)
 
                     // add the text
-                    arcs.append("text")
-                        .attr("transform", function (d, i) {
-                            d.innerRadius = 0;
-                            d.outerRadius = r;
-                            d.angle = (d.startAngle + d.endAngle) / 2;
-                            if (i === picked) {
-                                var style = document.createElement("style");
-                                style.innerHTML = `text[text-anchor="end"] {
-                                    transform: ${"rotate(" + (d.angle * 180 / Math.PI - 90) + "deg)translate(" + (d.outerRadius - 30) + "px,30px)" + "rotateZ(90deg)"};
-                                }`
-                                shadowRoot.querySelector("#fw-chart-spin-wheel").appendChild(style);
-                            }
-                            return "rotate(" + (d.angle * 180 / Math.PI - 90) + ")translate(" + (d.outerRadius - 20) + ")";
-                        })
-                        .attr("text-anchor", "end")
-                        .text(function (d, i) {
-                            return i === picked ? data[i].label : "";
-                        });
+                    // arcs.append("text")
+                    //     .attr("transform", function (d, i) {
+                    //         d.innerRadius = 0;
+                    //         d.outerRadius = r;
+                    //         d.angle = (d.startAngle + d.endAngle) / 2;
+                    //         if (i === picked) {
+                    //             var style = document.createElement("style");
+                    //             style.innerHTML = `text[text-anchor="end"] {
+                    //                 transform: ${"rotate(" + (d.angle * 180 / Math.PI - 90) + "deg)translate(" + (d.outerRadius - 30) + "px,30px)" + "rotateZ(90deg)"};
+                    //             }`
+                    //             shadowRoot.querySelector("#fw-chart-spin-wheel").appendChild(style);
+                    //         }
+                    //         return "rotate(" + (d.angle * 180 / Math.PI - 90) + ")translate(" + (d.outerRadius - 20) + ")";
+                    //     })
+                    //     .attr("text-anchor", "end")
+                    //     .text(function (d, i) {
+                    //         return i === picked ? data[i].label : "";
+                    //     });
 
                     spinnedCallback()
                 });
@@ -106,7 +182,7 @@ export function drawWheel(shadowRoot, data, unlock, spinnedCallback) {
         container.append("circle")
             .attr("cx", 0)
             .attr("cy", 0)
-            .attr("r", 60)
+            .attr("r", 45)
             .style({ "fill": "white", "cursor": "pointer" });
         //spin text
         container.append("text")

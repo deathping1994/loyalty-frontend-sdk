@@ -992,7 +992,28 @@ window.onload = async function loggedIn(fetchThemeDetails = true) {
 
                         shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .fw_points__overlay .full_height_overlay_modal .content .playArea').appendChild(script1);
 
-                        drawWheel(shadowRoot, Array.from({ length: 6 }, () => ({ label: "", value: 5 })), false);
+                        const spinWheelRewardDataRes = await fetch(`${process.env.WALLET_API_URI}/get-spin-wheel-rewards`, {
+                            "method": "POST",
+                            "headers": {
+                                "Content-Type": "application/json"
+                            },
+                            "body": JSON.stringify({
+                                "customer_id": customer_id,
+                                "user_hash": customer_tags,
+                                "client_id": client_id,
+                                "couponAmount": spinWheelAmount,
+                            })
+                        });
+
+                        const spinWheelRewardDataReponse = await spinWheelRewardDataRes.json();
+                        const spinWheelRewardData = spinWheelRewardDataReponse?.data;
+
+                        drawWheel(shadowRoot, spinWheelRewardData.map((item, index) => {
+                            return {
+                                label: item,
+                                value: index
+                            }
+                        }), false);
 
                         showLoadingScreen(false);
 
@@ -1022,7 +1043,12 @@ window.onload = async function loggedIn(fetchThemeDetails = true) {
                             const unlockedWheel = shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .fw_points__overlay .playArea #fw-chart-spin-wheel svg')
                             unlockedWheel.parentNode.removeChild(unlockedWheel);
 
-                            drawWheel(shadowRoot, Array.from({ length: 6 }, () => ({ label: spinData?.data?.win_coupon || spinData?.data?.win_message, value: 5 })), true, () => {
+                            drawWheel(shadowRoot, spinWheelRewardData.map((item, index) => {
+                                return {
+                                    label: item,
+                                    value: index
+                                }
+                            }), true, spinData?.data?.win_index, () => {
                                 setTimeout(async function showSpinWheelWinningPopup() {
                                     shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .fw_points__overlay .playArea .spinned-win-modal-container .spin-win-message').innerHTML = spinData?.data?.win_message;
 
