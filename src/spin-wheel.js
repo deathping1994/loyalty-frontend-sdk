@@ -74,7 +74,6 @@ export function drawWheel(shadowRoot, data, unlock, winningIdx, spinnedCallback)
             rotation = 0,
             oldrotation = 0,
             picked = winningIdx,
-            oldpick = [],
             color = d3.scale.category20();
 
         var svg = d3.select(chartElement)
@@ -118,22 +117,12 @@ export function drawWheel(shadowRoot, data, unlock, winningIdx, spinnedCallback)
         function spin(d) {
 
             container.on("click", null);
-            //all slices have been seen, all done
-            var ps = 360 / data.length,
-                pieslice = Math.round(1440 / data.length),
-                rng = Math.floor((Math.random() * 1440) + 360);
 
-            rotation = (Math.round(rng / ps) * ps);
+            var totalValues = data.length;
+            var x = winningIdx - 1;//since the wheel starts at 1 instead of 0
+            var anglePerValue = 360 / totalValues;
+            rotation = -((x * anglePerValue) + (360 * 3)); // 3 rotations
 
-            // picked = Math.round(data.length - (rotation % 360) / ps);
-            // picked = picked >= data.length ? (picked % data.length) : picked;
-            if (oldpick.indexOf(picked) !== -1) {
-                d3.select(this).call(spin);
-                return;
-            } else {
-                oldpick.push(picked);
-            }
-            rotation += 90 - Math.round(ps / 2);
             vis.transition()
                 .duration(3000)
                 .attrTween("transform", rotTween)
