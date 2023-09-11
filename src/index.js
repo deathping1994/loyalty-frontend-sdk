@@ -140,6 +140,10 @@ async function setTheme({ client_id }) {
         }
     }
 
+    return {
+        login_page_url: themeDetails?.data?.login_page
+    }
+
 }
 
 function showAlertPopup(message, severity) {
@@ -364,7 +368,15 @@ async function redeemReferHash({ customer_id, customer_tags, client_id }) {
                         overlay.innerHTML = overLayScreenUnlockCode;
 
                         (function openOverlay() {
-                            overlay.style.height = "62%";
+                            if (window.innerHeight > 575 && window.innerHeight < 666) {
+                                overlay.style.height = "70%"
+                            } else if (window.innerHeight < 575 && window.innerHeight > 500) {
+                                overlay.style.height = "80%"
+                            } else if (window.innerHeight < 500) {
+                                overlay.style.height = "90%"
+                            } else {
+                                overlay.style.height = "60%"
+                            }
                             const scrolled = shadowRoot.querySelector('.fw_points__overlay.show_overlay').scrollTop;
                             overlay.style.bottom = `-${scrolled}px`;
                             const backDrop = document.createElement('div');
@@ -509,7 +521,15 @@ async function redeemReferHash({ customer_id, customer_tags, client_id }) {
                         overlay.innerHTML = overLayScreenUnlockCode;
 
                         (function openOverlay() {
-                            overlay.style.height = "62%";
+                            if (window.innerHeight > 575 && window.innerHeight < 666) {
+                                overlay.style.height = "70%"
+                            } else if (window.innerHeight < 575 && window.innerHeight > 500) {
+                                overlay.style.height = "80%"
+                            } else if (window.innerHeight < 500) {
+                                overlay.style.height = "90%"
+                            } else {
+                                overlay.style.height = "60%"
+                            }
                             const scrolled = shadowRoot.querySelector('.fw_points__overlay.show_overlay').scrollTop;
                             overlay.style.bottom = `-${scrolled}px`;
                             const backDrop = document.createElement('div');
@@ -674,7 +694,15 @@ async function redeemReferHash({ customer_id, customer_tags, client_id }) {
                             overlay.innerHTML = overLayScreenUnlockCode;
 
                             (function openOverlay() {
-                                overlay.style.height = "62%";
+                                if (window.innerHeight > 575 && window.innerHeight < 666) {
+                                    overlay.style.height = "70%"
+                                } else if (window.innerHeight < 575 && window.innerHeight > 500) {
+                                    overlay.style.height = "80%"
+                                } else if (window.innerHeight < 500) {
+                                    overlay.style.height = "90%"
+                                } else {
+                                    overlay.style.height = "60%"
+                                }
                                 const scrolled = shadowRoot.querySelector('.fw_points__overlay.show_overlay').scrollTop;
                                 overlay.style.bottom = `-${scrolled}px`;
                                 const backDrop = document.createElement('div');
@@ -1977,7 +2005,13 @@ async function redeemReferHash({ customer_id, customer_tags, client_id }) {
                     overlay.innerHTML = overLayScreenUnlockCode;
 
                     (function openOverlay() {
-                        overlay.style.height = "80%";
+                        if (window.innerHeight > 600) {
+                            overlay.style.height = "80%";
+                            overlay.style.overflowY = "hidden";
+                        } else {
+                            overlay.style.height = "100%";
+                            overlay.style.overflowY = "scroll";
+                        }
                         const scrolled = shadowRoot.querySelector('.fw_points__overlay.show_overlay').scrollTop;
                         overlay.style.bottom = `-${scrolled}px`;
                         const backDrop = document.createElement('div');
@@ -2054,7 +2088,7 @@ async function redeemReferHash({ customer_id, customer_tags, client_id }) {
             })();
         } else if (client_id) {
             if (fetchThemeDetails) {
-                await setTheme({ client_id });
+                var themeVars = await setTheme({ client_id });
             }
 
             const couponDataRes = await fetch(`${process.env.WALLET_API_URI}/get-featured-coupons`, {
@@ -2123,7 +2157,7 @@ async function redeemReferHash({ customer_id, customer_tags, client_id }) {
 
             shadowRoot.querySelector('.fw_points__overlay.show_overlay .content').addEventListener('click', function openSignInPopup() {
                 shadowRoot.querySelector('.fw_points__overlay.show_overlay .content').removeEventListener('click', openSignInPopup);
-                location.href = platform_type === "SPA" ? "/page/login" : "/account/login"; //TODO- Take from backend
+                location.href = themeVars?.login_page_url || "/account/login";
             })
         }
     }
