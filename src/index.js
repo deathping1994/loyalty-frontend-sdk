@@ -1087,6 +1087,20 @@ async function redeemReferHash({ customer_id, customer_tags, client_id }) {
 
                                         if (spinData?.data?.win_coupon) {
                                             shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .fw_points__overlay .playArea .spinned-win-modal-container .spin-win-coupon p').innerHTML = `Coupon Code: ${spinData?.data?.win_coupon}`;
+
+                                            const response = fetch(`${process.env.WALLET_API_URI}/save-static-user-coupon`, {
+                                                "method": "POST",
+                                                "headers": {
+                                                    "Content-Type": "application/json"
+                                                },
+                                                "body": JSON.stringify({
+                                                    customer_id: customer_id,
+                                                    user_hash: customer_tags,
+                                                    client_id: client_id,
+                                                    coupon_code: spinData?.data?.win_coupon,
+                                                    coupon_title: spinData?.data?.win_message
+                                                })
+                                            });
                                         }
 
                                         shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .fw_points__overlay .playArea .spinned-win-modal-container').style.height = "100%";
@@ -1566,6 +1580,20 @@ async function redeemReferHash({ customer_id, customer_tags, client_id }) {
 
                                             if (scratchCardData?.data?.win_coupon) {
                                                 shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .fw_points__overlay .playArea .scratched-win-modal-container .scratch-win-coupon p').innerHTML = `Coupon Code: ${scratchCardData?.data?.win_coupon}`;
+
+                                                const response = fetch(`${process.env.WALLET_API_URI}/save-static-user-coupon`, {
+                                                    "method": "POST",
+                                                    "headers": {
+                                                        "Content-Type": "application/json"
+                                                    },
+                                                    "body": JSON.stringify({
+                                                        customer_id: customer_id,
+                                                        user_hash: customer_tags,
+                                                        client_id: client_id,
+                                                        coupon_code: scratchCardData?.data?.win_coupon,
+                                                        coupon_title: scratchCardData?.data?.win_message
+                                                    })
+                                                });
                                             }
 
                                             shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .fw_points__overlay .playArea .scratched-win-modal-container').style.height = "100%";
