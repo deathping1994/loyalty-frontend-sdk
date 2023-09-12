@@ -832,17 +832,34 @@ async function redeemReferHash({ customer_id, customer_tags, client_id }) {
                         let UnlockedCouponsHTML = '';
                         if (unlockedCoupons?.length > 0) {
                             unlockedCoupons.forEach((couponItem) => {
-                                UnlockedCouponsHTML += `<div class="couponsContentCard">
-                                <div class="couponsContentImg">
-                                    <h5>₹${couponItem?.amount}</h5>
-                                    <p>Voucher</p>
-                                </div>
-                                <div class="couponsContentText">
-                                    <h5>${couponItem?.title}</h5>
-                                    <div class="couponCodeContainer"><p>code:</p><h5>${couponItem?.coupon}</h5></div>
-                                    <p>created on ${couponItem?.date}</p>
-                                </div>
-                            </div>`
+                                if (couponItem?.amount) {
+                                    UnlockedCouponsHTML += `
+                                    <div class="couponsContentCard">
+                                        <div class="couponsContentImg">
+                                            <h5>₹${couponItem?.amount}</h5>
+                                            <p>Voucher</p>
+                                        </div>
+                                        <div class="couponsContentText">
+                                            <h5>${couponItem?.title}</h5>
+                                            <div class="couponCodeContainer"><p>code:</p><h5>${couponItem?.coupon}</h5></div>
+                                            <p>created on ${couponItem?.date}</p>
+                                        </div>
+                                    </div>`
+                                } else {
+                                    UnlockedCouponsHTML += `
+                                    <div class="couponsContentCard">
+                                        <div class="couponsContentImg">
+                                            <p>Special</p>
+                                            <p>Voucher</p>
+                                        </div>
+                                        <div class="couponsContentText">
+                                            <h5>${couponItem?.title}</h5>
+                                            <div class="couponCodeContainer"><p>code:</p><h5>${couponItem?.coupon}</h5></div>
+                                            <p>created on ${couponItem?.date}</p>
+                                        </div>
+                                    </div>`
+                                }
+
                             });
                         } else {
                             UnlockedCouponsHTML = `
@@ -1190,17 +1207,34 @@ async function redeemReferHash({ customer_id, customer_tags, client_id }) {
                         let UnlockedCouponsHTML = '';
                         if (unlockedCoupons?.length > 0) {
                             unlockedCoupons.forEach((couponItem) => {
-                                UnlockedCouponsHTML += `<div class="couponsContentCard">
-                                <div class="couponsContentImg">
-                                    <h5>₹${couponItem?.amount}</h5>
-                                    <p>Voucher</p>
-                                </div>
-                                <div class="couponsContentText">
-                                    <h5>${couponItem?.title}</h5>
-                                    <div class="couponCodeContainer"><p>code:</p><h5>${couponItem?.coupon}</h5></div>
-                                    <p>created on ${couponItem?.date}</p>
-                                </div>
-                            </div>`
+                                if (couponItem?.amount) {
+                                    UnlockedCouponsHTML += `
+                                    <div class="couponsContentCard">
+                                        <div class="couponsContentImg">
+                                            <h5>₹${couponItem?.amount}</h5>
+                                            <p>Voucher</p>
+                                        </div>
+                                        <div class="couponsContentText">
+                                            <h5>${couponItem?.title}</h5>
+                                            <div class="couponCodeContainer"><p>code:</p><h5>${couponItem?.coupon}</h5></div>
+                                            <p>created on ${couponItem?.date}</p>
+                                        </div>
+                                    </div>`
+                                } else {
+                                    UnlockedCouponsHTML += `
+                                    <div class="couponsContentCard">
+                                        <div class="couponsContentImg">
+                                            <p>Special</p>
+                                            <p>Voucher</p>
+                                        </div>
+                                        <div class="couponsContentText">
+                                            <h5>${couponItem?.title}</h5>
+                                            <div class="couponCodeContainer"><p>code:</p><h5>${couponItem?.coupon}</h5></div>
+                                            <p>created on ${couponItem?.date}</p>
+                                        </div>
+                                    </div>`
+                                }
+
                             });
                         } else {
                             UnlockedCouponsHTML = `
@@ -1689,17 +1723,34 @@ async function redeemReferHash({ customer_id, customer_tags, client_id }) {
                         let UnlockedCouponsHTML = '';
                         if (unlockedCoupons?.length > 0) {
                             unlockedCoupons.forEach((couponItem) => {
-                                UnlockedCouponsHTML += `<div class="couponsContentCard">
-                                <div class="couponsContentImg">
-                                    <h5>₹${couponItem?.amount}</h5>
-                                    <p>Voucher</p>
-                                </div>
-                                <div class="couponsContentText">
-                                    <h5>${couponItem?.title}</h5>
-                                    <div class="couponCodeContainer"><p>code:</p><h5>${couponItem?.coupon}</h5></div>
-                                    <p>created on ${couponItem?.date}</p>
-                                </div>
-                            </div>`
+                                if (couponItem?.amount) {
+                                    UnlockedCouponsHTML += `
+                                    <div class="couponsContentCard">
+                                        <div class="couponsContentImg">
+                                            <h5>₹${couponItem?.amount}</h5>
+                                            <p>Voucher</p>
+                                        </div>
+                                        <div class="couponsContentText">
+                                            <h5>${couponItem?.title}</h5>
+                                            <div class="couponCodeContainer"><p>code:</p><h5>${couponItem?.coupon}</h5></div>
+                                            <p>created on ${couponItem?.date}</p>
+                                        </div>
+                                    </div>`
+                                } else {
+                                    UnlockedCouponsHTML += `
+                                    <div class="couponsContentCard">
+                                        <div class="couponsContentImg">
+                                            <p>Special</p>
+                                            <p>Voucher</p>
+                                        </div>
+                                        <div class="couponsContentText">
+                                            <h5>${couponItem?.title}</h5>
+                                            <div class="couponCodeContainer"><p>code:</p><h5>${couponItem?.coupon}</h5></div>
+                                            <p>created on ${couponItem?.date}</p>
+                                        </div>
+                                    </div>`
+                                }
+
                             });
                         } else {
                             UnlockedCouponsHTML = `
@@ -1893,17 +1944,34 @@ async function redeemReferHash({ customer_id, customer_tags, client_id }) {
                         let UnlockedCouponsHTML = '';
                         if (unlockedCoupons?.length > 0) {
                             unlockedCoupons.forEach((couponItem) => {
-                                UnlockedCouponsHTML += `<div class="couponsContentCard">
-                                <div class="couponsContentImg">
-                                    <h5>₹${couponItem?.amount}</h5>
-                                    <p>Voucher</p>
-                                </div>
-                                <div class="couponsContentText">
-                                    <h5>${couponItem?.title}</h5>
-                                    <div class="couponCodeContainer"><p>code:</p><h5>${couponItem?.coupon}</h5></div>
-                                    <p>created on ${couponItem?.date}</p>
-                                </div>
-                            </div>`
+                                if (couponItem?.amount) {
+                                    UnlockedCouponsHTML += `
+                                    <div class="couponsContentCard">
+                                        <div class="couponsContentImg">
+                                            <h5>₹${couponItem?.amount}</h5>
+                                            <p>Voucher</p>
+                                        </div>
+                                        <div class="couponsContentText">
+                                            <h5>${couponItem?.title}</h5>
+                                            <div class="couponCodeContainer"><p>code:</p><h5>${couponItem?.coupon}</h5></div>
+                                            <p>created on ${couponItem?.date}</p>
+                                        </div>
+                                    </div>`
+                                } else {
+                                    UnlockedCouponsHTML += `
+                                    <div class="couponsContentCard">
+                                        <div class="couponsContentImg">
+                                            <p>Special</p>
+                                            <p>Voucher</p>
+                                        </div>
+                                        <div class="couponsContentText">
+                                            <h5>${couponItem?.title}</h5>
+                                            <div class="couponCodeContainer"><p>code:</p><h5>${couponItem?.coupon}</h5></div>
+                                            <p>created on ${couponItem?.date}</p>
+                                        </div>
+                                    </div>`
+                                }
+
                             });
                         } else {
                             UnlockedCouponsHTML = `
