@@ -164,8 +164,7 @@ function showAlertPopup(message, severity) {
 
 async function redeemReferHash({ customer_id, customer_tags, client_id }) {
     const fc_refer_hash = localStorage.getItem("fc_refer_hash");
-    const redeemed = localStorage.getItem("fc_refer_hash_redeemed")
-    if (fc_refer_hash && !redeemed) {
+    if (fc_refer_hash) {
         try {
             const response = await fetch(`${process.env.WALLET_API_URI}/redeem-referral-code`, {
                 "method": "POST",
@@ -179,7 +178,7 @@ async function redeemReferHash({ customer_id, customer_tags, client_id }) {
                     refer_hash: fc_refer_hash
                 })
             });
-            localStorage.setItem("fc_refer_hash_redeemed", true)
+            localStorage.removeItem("fc_refer_hash")
         } catch (err) {
             console.log("error in redeemReferHash", err)
         }
