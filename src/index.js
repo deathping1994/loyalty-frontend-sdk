@@ -216,7 +216,7 @@ async function redeemReferHash({ customer_id, customer_tags, client_id }) {
                 })
             });
             let walletData = await response.json()
-            let walletAmount = walletData?.data?.data?.wallet?.wallet?.amount;
+            let walletAmount = walletData?.data?.data?.wallet?.wallet?.amount || 0;
 
             if (!walletData?.data?.data?.wallet?.wallet?.id) {
                 await fetch(`${process.env.WALLET_API_URI}/sync-external-user`, {
@@ -243,7 +243,7 @@ async function redeemReferHash({ customer_id, customer_tags, client_id }) {
                     })
                 });
                 walletData = await response.json();
-                walletAmount = walletData?.data?.data?.wallet?.wallet?.amount;
+                walletAmount = walletData?.data?.data?.wallet?.wallet?.amount || 0;
             }
 
             const couponDataRes = await fetch(`${process.env.WALLET_API_URI}/get-featured-coupons`, {
@@ -439,7 +439,7 @@ async function redeemReferHash({ customer_id, customer_tags, client_id }) {
                                     })
                                 });
                                 const walletData = await response.json()
-                                walletAmount = walletData?.data?.data?.wallet?.wallet?.amount;
+                                walletAmount = walletData?.data?.data?.wallet?.wallet?.amount || 0;
                                 if (shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .fw_points__overlay .cardWrapper.points .pointsBox .walletAmount')) {
                                     shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .fw_points__overlay .cardWrapper.points .pointsBox .walletAmount').innerHTML = walletAmount;
                                 } else if (shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .fw_points__overlay .top-head-points .points-wrapper')) {
@@ -600,7 +600,7 @@ async function redeemReferHash({ customer_id, customer_tags, client_id }) {
                                     })
                                 });
                                 const walletData = await response.json()
-                                walletAmount = walletData?.data?.data?.wallet?.wallet?.amount;
+                                walletAmount = walletData?.data?.data?.wallet?.wallet?.amount || 0;
                                 if (shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .fw_points__overlay .cardWrapper.points .pointsBox .walletAmount')) {
                                     shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .fw_points__overlay .cardWrapper.points .pointsBox .walletAmount').innerHTML = walletAmount;
                                 } else if (shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .fw_points__overlay .top-head-points .points-wrapper')) {
@@ -765,7 +765,7 @@ async function redeemReferHash({ customer_id, customer_tags, client_id }) {
                                         })
                                     });
                                     const walletData = await response.json()
-                                    walletAmount = walletData?.data?.data?.wallet?.wallet?.amount;
+                                    walletAmount = walletData?.data?.data?.wallet?.wallet?.amount || 0;
                                     if (shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .fw_points__overlay .cardWrapper.points .pointsBox .walletAmount')) {
                                         shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .fw_points__overlay .cardWrapper.points .pointsBox .walletAmount').innerHTML = walletAmount;
                                     } else if (shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .fw_points__overlay .top-head-points .points-wrapper')) {
@@ -1140,7 +1140,7 @@ async function redeemReferHash({ customer_id, customer_tags, client_id }) {
                                             })
                                         });
                                         const walletData = await response.json()
-                                        walletAmount = walletData?.data?.data?.wallet?.wallet?.amount;
+                                        walletAmount = walletData?.data?.data?.wallet?.wallet?.amount || 0;
                                         if (shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .fw_points__overlay .top-head-points .points-wrapper')) {
                                             shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .fw_points__overlay .top-head-points .points-wrapper').innerHTML = walletAmount;
                                         }
@@ -1650,7 +1650,7 @@ async function redeemReferHash({ customer_id, customer_tags, client_id }) {
                                                 })
                                             });
                                             const walletData = await response.json()
-                                            walletAmount = walletData?.data?.data?.wallet?.wallet?.amount;
+                                            walletAmount = walletData?.data?.data?.wallet?.wallet?.amount || 0;
                                             if (shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .fw_points__overlay .top-head-points .points-wrapper')) {
                                                 shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .fw_points__overlay .top-head-points .points-wrapper').innerHTML = walletAmount;
                                             }
