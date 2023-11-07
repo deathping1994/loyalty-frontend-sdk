@@ -140,6 +140,18 @@ async function setTheme({ client_id }) {
         }
     }
 
+    const clientCustomStyleData = themeDetails?.data?.custom_css;
+    if (clientCustomStyleData) {
+        var clientCustomStyleElement = `
+        <style>
+        ${clientCustomStyleData}
+        </style>
+        `;
+        shadowRoot.querySelector('.fw_points').nextSibling.nextSibling.insertAdjacentHTML("afterend", clientCustomStyleElement);
+    }
+
+    shadowRoot.querySelector('.fw_points').style.display = 'flex';//widget visible only after custom styles are applied
+
     return {
         login_page_url: themeDetails?.data?.login_page
     }
