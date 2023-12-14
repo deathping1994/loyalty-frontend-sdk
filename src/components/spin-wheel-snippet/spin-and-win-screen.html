@@ -1,0 +1,174 @@
+<div class="go-back-header">
+    <h4 class="go-back-header-heading"><img class="close" src="https://media.farziengineer.co/farziwallet/cross.png"
+            alt="close header" width="30px"></h4>
+</div>
+<div class="content">
+    <div class="couponsScreenContainer playArea">
+        <div class="top-head">
+            <div class="top-head-points">
+                <span class="coins-icon"></span>
+                <p class="points-wrapper">0</p>
+            </div>
+        </div>
+        <div class="spinWheelHeading">
+            <h4>Spin and Win</h4>
+        </div>
+
+        <div id="fw-chart-spin-wheel" class="locked-wheel">
+            <img class="locked-spin" src="https://media.farziengineer.co/farziwallet/lock.png" />
+        </div>
+
+        <!-- <script src="https://d3js.org/d3.v3.min.js" charset="utf-8"></script> -->
+
+        <div class="spin-wheel-bottom">
+            <hr class="divider-line" />
+
+            <div class="unlock-wheel-text">Unlock for 10 . Coins</div>
+            <button class="unlock-spin-wheel-btn">Tap to unlock</button>
+        </div>
+
+        <div class="spinned-win-modal-container">
+            <div class="spinned-win-modal">
+                <h3>Congratulations!</h3>
+                <p>You won</p>
+                <h3 class="spin-win-message">50 . Coins</h3>
+                <div class="spin-win-coupon">
+                    <p></p>
+                </div>
+                <div class="spin-win-play-again"><button>Play Again</button></div>
+                <div class="spin-win-close"><button>close</button></div>
+            </div>
+        </div>
+
+        <style>
+            .fw_points__overlay #fw-chart-spin-wheel {
+                width: 100%;
+                height: auto;
+                min-height: 250px;
+                position: relative;
+                transform: rotate(-90deg);
+            }
+
+            .fw_points__overlay #fw-chart-spin-wheel.locked-wheel svg {
+                opacity: 0.7;
+            }
+
+            .fw_points__overlay #fw-chart-spin-wheel.locked-wheel img {
+                position: absolute;
+                top: 36%;
+                left: 29%;
+                transform: rotate(90deg);
+                z-index: 99;
+                max-width: 118px;
+            }
+
+            .fw_points__overlay text[text-anchor="end"] {
+                /* transform: rotateZ(-90deg) translate(12%, -35%); to be added from js*/
+                fill: #fff;
+                stroke: #fff;
+                stroke-width: 0.4px;
+                font-size: 14px;
+            }
+
+            .fw_points__overlay text {
+                cursor: pointer;
+            }
+
+            .fw_points__overlay .spin-wheel-bottom {
+                padding: 20px;
+            }
+
+            .fw_points__overlay .divider-line {
+                border: none;
+                height: 1px;
+                background: repeating-linear-gradient(90deg, #000, #000 6px, transparent 6px, transparent 12px);
+            }
+
+            .fw_points__overlay .unlock-wheel-text {
+                font-weight: 700;
+                font-size: 16px;
+                margin: 12px 0px;
+                text-align: center;
+            }
+
+            .fw_points__overlay .unlock-spin-wheel-btn {
+                background: #000;
+                color: #fff;
+                padding: 11px 0;
+                border-radius: 8px;
+                font-family: Inter, sans-serif;
+                font-weight: 700;
+                cursor: pointer;
+                width: 100%;
+                font-size: 14px;
+            }
+
+            .fw_points__overlay .spinned-win-modal-container {
+                position: absolute;
+                width: 100%;
+                height: 0%;
+                overflow: hidden;
+                transition: height 0.5s ease;
+                top: 0;
+                left: 0;
+                background: #ffffff7d;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+
+            .fw_points__overlay .spinned-win-modal-container .spinned-win-modal {
+                background: #000;
+                color: #fff;
+                padding: 30px 25px;
+                box-shadow: 0px -4px 24px rgba(0, 0, 0, .12);
+                border-radius: 12px;
+                max-width: 90%;
+            }
+
+            .fw_points__overlay .spinned-win-modal-container .spinned-win-modal h3 {
+                margin: 18px 0px;
+                font-size: 18px;
+                text-align: center;
+            }
+
+            .fw_points__overlay .spinned-win-modal-container .spinned-win-modal .spin-win-message {
+                font-size: 20px;
+            }
+
+            .fw_points__overlay .spinned-win-modal-container .spinned-win-modal .spin-win-coupon {
+                margin-bottom: 20px;
+                font-size: 15px;
+            }
+
+            .fw_points__overlay .spinned-win-modal-container .spinned-win-modal>div,
+            .fw_points__overlay .spinned-win-modal-container .spinned-win-modal>p {
+                text-align: center;
+            }
+
+            .fw_points__overlay .spinned-win-modal-container .spinned-win-modal .spin-win-play-again button {
+                width: 100%;
+                background: #fff;
+                color: #000;
+                font-family: 'Inter';
+                font-size: 14px;
+                font-weight: 600;
+                padding: 10px;
+                border-radius: 4px;
+                cursor: pointer;
+            }
+
+            .fw_points__overlay .spinned-win-modal-container .spinned-win-modal .spin-win-close button {
+                color: #fff;
+                background: #000;
+                border: 0;
+                font-size: 14px;
+                font-weight: 500;
+                padding: 5px;
+                margin: 10px;
+                cursor: pointer;
+            }
+        </style>
+
+    </div>
+</div>

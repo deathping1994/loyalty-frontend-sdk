@@ -6,6 +6,7 @@ module.exports = {
     watch: true,
     entry: {
         'index': './src/index.js',
+        'spin-wheel-snippet': './src/spin-wheel-snippet'
     }, // Entry point of your JavaScript code
     output: {
         path: path.resolve(__dirname, 'dist'),
