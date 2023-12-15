@@ -9,6 +9,7 @@ module.exports = {
         'spin-wheel-snippet': './src/spin-wheel-snippet',
         'scratch-card-snippet': './src/scratch-card-snippet',
         'gifting-coupons-snippet': './src/gifting-coupons-snippet',
+        'referral-snippet': './src/referral-snippet',
     }, // Entry point of your JavaScript code
     output: {
         path: path.resolve(__dirname, 'dist'),
