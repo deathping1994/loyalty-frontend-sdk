@@ -8,6 +8,7 @@ module.exports = {
         'index': './src/index.js',
         'spin-wheel-snippet': './src/spin-wheel-snippet',
         'scratch-card-snippet': './src/scratch-card-snippet',
+        'gifting-coupons-snippet': './src/gifting-coupons-snippet',
     }, // Entry point of your JavaScript code
     output: {
         path: path.resolve(__dirname, 'dist'),
