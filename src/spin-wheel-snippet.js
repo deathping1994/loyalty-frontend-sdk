@@ -37,39 +37,6 @@ document.querySelector('#fc-wallet-spin-wheel-snippet-19212').innerHTML = '';
 document.querySelector('#fc-wallet-spin-wheel-snippet-19212').appendChild(container);
 
 
-
-(function popUptoggleOnAndOff() {
-    var widgetButton = shadowRoot.getElementById('widget-container');
-    var cardContainer = shadowRoot.getElementById('card-container');
-    var headerClose = shadowRoot.getElementById('header-close');
-    var closeBtn = shadowRoot.querySelector('.fw_points__overlay.show_overlay .header .header-close');
-    const body = document.querySelector('body');
-
-    widgetButton.addEventListener('click', function () {
-        if (cardContainer.style.display === 'none') {
-            cardContainer.style.display = 'block';
-            body.classList.add("fc-no-scroll");
-        } else {
-            cardContainer.style.display = 'none';
-            body.classList.remove("fc-no-scroll");
-        }
-    });
-
-    function closeWidgetPopup() {
-        if (cardContainer.style.display === 'none') {
-            cardContainer.style.display = 'block';
-            body.classList.add("fc-no-scroll");
-        } else {
-            cardContainer.style.display = 'none';
-            body.classList.remove("fc-no-scroll");
-        }
-    }
-
-    headerClose.addEventListener('click', closeWidgetPopup);
-    closeBtn?.addEventListener('click', closeWidgetPopup);
-})();
-
-
 function showLoadingScreen(showLoader) {
     if (showLoader) {
         const loadingBackDrop = document.createElement('div');
