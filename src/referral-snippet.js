@@ -43,7 +43,7 @@ async function redeemReferHash({ customer_id, customer_tags, client_id }) {
 
 (function main() {
 
-    const mainScript = document.querySelector('#fc-wallet-19212');
+    const mainScript = document.querySelector('#fc-wallet-referral-snippet-script-19212');
     const platform_type = mainScript.getAttribute('platform-type');
 
     async function loggedIn() {
