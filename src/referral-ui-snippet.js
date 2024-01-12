@@ -1,8 +1,4 @@
 import signupscreen from "./components/referral-ui-snippet/signup-screen.html"
-import fullheightoverlaymodal from "./components/scratch-card-snippet/full-height-overlay-modal.html"
-import yourcouponsscreen from "./components/your-coupons-screen.html"
-import exploregamescreen2 from "./components/scratch-card-snippet/explore-game-screen.html"
-import scratchcardscreen from "./components/scratch-card-snippet/scratch-card-screen.html"
 import overlaymodal from "./components/referral-ui-snippet/overlay-modal.html"
 import loadingscreen from "./components/loading-screen.html"
 import inviteandearnpopup from "./components/referral-ui-snippet/invite-and-earn-popup.html"
@@ -29,7 +25,7 @@ import { injectVariablesToHTML } from "./utils/utils"
 // Load the HTML content into the shadow DOM
 const container = document.createElement('div');
 container.style.display = 'block';
-container.style.all = 'initial'; 
+container.style.all = 'initial';
 const shadowRoot = container.attachShadow({ mode: 'open' });
 shadowRoot.innerHTML = `
 ${signupscreen}
@@ -181,7 +177,7 @@ function showAlertPopup(message, severity) {
                 walletData = await response.json();
                 walletAmount = walletData?.data?.data?.wallet?.wallet?.amount || 0;
             }
-            (async function inviteFriends () {
+            (async function inviteFriends() {
 
                 let overLayScreenUnlockCode = injectVariablesToHTML(overlaymodal, ".content", inviteandearnpopup)
 
@@ -189,26 +185,9 @@ function showAlertPopup(message, severity) {
             You get 200 ${window.fc_loyalty_vars.coin_name || ''} Coins & they get 100 ${window.fc_loyalty_vars.coin_name || ''} Coins`)
 
 
-                const overlay = shadowRoot.querySelector('.fw_points__overlay.show_overlay');
+                const overlay = shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .fw_points__overlay');
 
                 overlay.innerHTML = overLayScreenUnlockCode;
-
-                (function openOverlay() {
-                    if (window.innerHeight > 600) {
-                        overlay.style.height = "80%";
-                        overlay.style.overflowY = "hidden";
-                    } else {
-                        overlay.style.height = "100%";
-                        overlay.style.overflowY = "scroll";
-                    }
-                    const scrolled = shadowRoot.querySelector('.fw_points__overlay.show_overlay').scrollTop;
-                    overlay.style.bottom = `-${scrolled}px`;
-                    const backDrop = document.createElement('div');
-                    backDrop.innerHTML = `<div class="overlay_modal_backdrop"></div>`;
-                    shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .fw_points__overlay').appendChild(backDrop);
-
-                    shadowRoot.querySelector('.fw_points__overlay.show_overlay').style.overflowY = "hidden";
-                })();
 
                 showLoadingScreen(true);
 
@@ -261,18 +240,18 @@ function showAlertPopup(message, severity) {
                     }, 1500)
                 })
 
-                shadowRoot.querySelector('.fw_points__overlay .overlay_modal .go-back-header .go-back-header-heading').addEventListener('click', function () {
+                // shadowRoot.querySelector('.fw_points__overlay .overlay_modal .go-back-header .go-back-header-heading').addEventListener('click', function () {
 
-                    (function closeOverlay() {
-                        overlay.style.height = "0%";
-                        overlay.style.bottom = "-120%";
-                        const backDrop = shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .fw_points__overlay .overlay_modal_backdrop');
-                        backDrop.parentNode.removeChild(backDrop);
-                        overlay.innerHTML = '';
-                        shadowRoot.querySelector('.fw_points__overlay.show_overlay').style.overflowY = "scroll";
-                    })();
+                //     (function closeOverlay() {
+                //         overlay.style.height = "0%";
+                //         overlay.style.bottom = "-120%";
+                //         const backDrop = shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .fw_points__overlay .overlay_modal_backdrop');
+                //         backDrop.parentNode.removeChild(backDrop);
+                //         overlay.innerHTML = '';
+                //         shadowRoot.querySelector('.fw_points__overlay.show_overlay').style.overflowY = "scroll";
+                //     })();
 
-                });
+                // });
             })();
         } else if (client_id) {
             if (fetchThemeDetails) {
