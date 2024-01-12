@@ -10,6 +10,7 @@ module.exports = {
         'scratch-card-snippet': './src/scratch-card-snippet',
         'gifting-coupons-snippet': './src/gifting-coupons-snippet',
         'referral-snippet': './src/referral-snippet',
+        'referral-ui-snippet': './src/referral-ui-snippet',
     }, // Entry point of your JavaScript code
     output: {
         path: path.resolve(__dirname, 'dist'),
