@@ -7,6 +7,7 @@ import { drawWheel } from './spin-wheel';
 import loadingscreen from "./components/loading-screen.html"
 import { injectVariablesToHTML } from "./utils/utils"
 
+
 (function loadfont() {
     const link = document.createElement('link');
     link.rel = 'stylesheet';
@@ -24,6 +25,10 @@ import { injectVariablesToHTML } from "./utils/utils"
     document.body.appendChild(styles);
 })();
 
+function winAudio() {
+    const audio = new Audio('https://media.farziengineer.co/farziwallet/success.mp3');
+    audio.play();
+}
 
 // Load the HTML content into the shadow DOM
 const container = document.createElement('div');
@@ -298,13 +303,13 @@ function showAlertPopup(message, severity) {
 
                             const unlockedWheel = shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .fw_points__overlay .playArea #fw-chart-spin-wheel svg')
                             unlockedWheel.parentNode.removeChild(unlockedWheel);
-
                             drawWheel(shadowRoot, spinWheelRewardData.map((item, index) => {
                                 return {
                                     label: item,
                                     value: index
                                 }
                             }), true, spinData?.data?.win_index, () => {
+                                winAudio()
                                 setTimeout(async function showSpinWheelWinningPopup() {
                                     shadowRoot.querySelector('.fw_points.XXsnipcss_extracted_selector_selectionXX .fw_points__overlay .playArea .spinned-win-modal-container .spin-win-message').innerHTML = spinData?.data?.win_message;
 
