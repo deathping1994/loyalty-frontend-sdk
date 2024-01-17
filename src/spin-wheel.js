@@ -1,3 +1,5 @@
+const spinAudio = new Audio('https://media.farziengineer.co/farziwallet/spinwheel.mp3');
+
 function splitStringOnLength(inputString, maxLength) {
     if (typeof inputString !== 'string') {
         return [];
@@ -115,7 +117,7 @@ export function drawWheel(shadowRoot, data, unlock, winningIdx, spinnedCallback)
 
         unlock && container.on("click", spin);
         function spin(d) {
-
+            spinAudio.play()
             container.on("click", null);
 
             var totalValues = data.length;
@@ -159,6 +161,7 @@ export function drawWheel(shadowRoot, data, unlock, winningIdx, spinnedCallback)
                     //     });
 
                     spinnedCallback()
+                    // spinAudio.pause()
                 });
         }
         //make arrow
