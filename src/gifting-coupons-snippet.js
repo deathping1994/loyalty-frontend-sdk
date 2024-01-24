@@ -132,7 +132,7 @@ function showAlertPopup(message, severity) {
         showLoadingScreen(true);
 
         const customer_id = mainScript.getAttribute('data-customer-id');
-        const customer_tags = mainScript.getAttribute('data-customer-tag')?.trim();
+        let customer_tags = mainScript.getAttribute('data-customer-tag')?.trim() || sessionStorage.getItem('fc_wallet_user_hash') || '';
         const client_id = mainScript.getAttribute('data-client-id');
 
         if (customer_id) {
@@ -180,7 +180,15 @@ function showAlertPopup(message, severity) {
                 });
                 walletData = await response.json();
                 walletAmount = walletData?.data?.data?.wallet?.wallet?.amount || 0;
-            }
+                
+                let get_user_hash=walletData?.data?.data?.user_hash
+                if (get_user_hash){
+                    customer_tags= get_user_hash;
+                    sessionStorage.setItem("fc_wallet_user_hash",get_user_hash)
+                }
+                                
+                
+                }
             const couponDataRes = await fetch(`${process.env.WALLET_API_URI}/get-featured-coupons`, {
                 "method": "POST",
                 "headers": {
