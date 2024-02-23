@@ -123,7 +123,7 @@ function showAlertPopup(message, severity) {
 
     const mainScript = document.querySelector('#fc-wallet-referral-snippet-ui-script-19212');
     const platform_type = mainScript.getAttribute('platform-type');
-
+    console.log("running local referral")
     async function loggedIn(fetchThemeDetails = true) {
         showLoadingScreen(true);
 
@@ -221,14 +221,14 @@ function showAlertPopup(message, severity) {
             <a class="socials-refer-icon-whatsapp-link"
             href="https://api.whatsapp.com/send?text=Click on the referral link below and get rewarded with 100 ${window.fc_loyalty_vars.coin_name || ''} Coins. ${referralLink}" target="_blank">
                 <div class="socials-refer-icon-whatsapp">
-                    <img src="https://media.farziengineer.co/farziwallet/whatsapp-icon.png" />
+                    <img style="filter: brightness(0) invert(100)" src="https://media.farziengineer.co/farziwallet/whatsapp-icon.png" />
                     <p>Send on whatsapp</p>
                 </div>
             </a>
             <a
             href="sms://18005555555/?body=Click on the referral link below and get rewarded with 100 ${window.fc_loyalty_vars.coin_name || ''} Coins. ${referralLink}" target="_blank">
                 <div class="socials-refer-icon">
-                    <img src="https://media.farziengineer.co/farziwallet/share-icon.png" />
+                    <img src="https://media.farziengineer.co/farziwallet/share_arrow.png" />
                 </div>
             </a>
             `
